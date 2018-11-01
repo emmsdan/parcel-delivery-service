@@ -15,12 +15,26 @@ const showAccessPage = () => {
   }
 }
 
+/**
+ * show & close mobile navigation
+ * Responsive mobile nav. bar
+*/
+const mobileMenu = () => {
+
+    for (let menu of document.querySelectorAll(".show-nav")){
+      menu.addEventListener('click', () => {
+        const resp = document.querySelector('header nav');
+        resp.classList.toggle ('responsive');
+      })
+    }
+}
 
 /**
  * initialize all the necessary functions
  */
-const init = () => { 
+const init = () => {
   showAccessPage();
+  mobileMenu();
   return;
 }
 
