@@ -408,3 +408,64 @@ header nav .icon {
 .screen a.get-started:hover{
   background: #ea302d;
 }
+/* authentication */
+.auth {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+/* columns */
+.boxes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 691px){
+  .boxes {
+    display: block;
+  }
+}
+.boxes .b-10 {
+  flex-grow: 10;
+}
+.boxes .b-9 {
+  flex-grow: 9;
+}
+.boxes .b-8 {
+  flex-grow: 8;
+}
+.boxes .b-7 {
+  flex-grow: 7;
+}
+.boxes .b-6 {
+  flex-grow: 6;
+}
+.boxes .b-5 {
+  flex-grow: 5;
+}
+.boxes .b-4 {
+  flex-grow: 4;
+}
+.boxes .b-3 {
+  flex-grow: 3;
+}
+.boxes .b-2 {
+  flex-grow: 2;
+}
+.boxes .b-1 {
+  flex-grow: 1;
+}
+
+/* helper classes */
+
+.uppercase {
+  text-transform: uppercase;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
