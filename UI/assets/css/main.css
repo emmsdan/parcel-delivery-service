@@ -375,6 +375,14 @@ header nav .icon {
 }
 /* contents */
 
+.box {
+  background: var(--theme-content-bg);
+  margin: 0 auto;
+  padding: 15px 10px;
+  box-shadow: 0 0 3px #ccc;
+  border-radius: 10px;
+  width: 90%;
+}
 
 .screen {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('../img/bg.jpg') ;
