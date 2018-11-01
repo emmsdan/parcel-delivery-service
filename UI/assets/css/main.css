@@ -8,6 +8,13 @@ html {
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  background: rgba(192, 224, 243, 0.111);
+  scroll-behavior: smooth;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  -o-user-select: none;
+  user-select: none;
   --navy: #1E294C;
   --theme-content-bg: #fff;
   --theme-bg: #E7EDF7;
@@ -16,19 +23,6 @@ html {
   --theme-field-border: #0277bd;
 }
 *{
-  font: inherit;
-  margin: 0;
-}
-html {
-  scroll-behavior: smooth;
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  -o-user-select: none;
-  user-select: none;
-}
-
-* {
   font-family: Roboto, sans-serif;
   box-sizing:border-box;
   margin: 0;
@@ -300,9 +294,10 @@ input:focus ~ .highlight {
 header {
   min-height: 60px;
   padding: 10px;
-  box-shadow: 0 0 13px #ccc;
+  box-shadow: 0 0 22px #ccc;
   display: flex;
   flex-direction: row;
+  background: #fff;
 }
 header .logo {
   max-width: 110px;
@@ -372,6 +367,33 @@ header nav .icon {
     text-align: left;
   }
 
+}
+/* side navigation */
+
+nav.side a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+  text-align: center;
+}
+
+nav.side a:nth-child(even) {
+  background-color: #ccc; /* Dark grey background on mouse-over */
+}
+
+nav.side a:hover {
+  background-color: rgba(0, 0, 0, 0.298); /* Add a green color to the "active/current" link */
+  color: white;
+}
+nav.side a.header {
+  font-weight: 800;
+  font-size: 4vh;
+  background: #fff;
+  box-shadow: 0 0 12px #999;
+  color: #000;
+  text-transform: uppercase;
 }
 /* contents */
 
@@ -497,4 +519,8 @@ header nav .icon {
   clear: both;
   height: 20px;
   padding: 20px;
+}
+.w90p {
+  width: 90%;
+  margin: auto;
 }
