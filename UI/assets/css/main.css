@@ -236,3 +236,104 @@ input:focus ~ .highlight {
   -moz-animation:inputHighlighter 0.3s ease;
   animation:inputHighlighter 0.3s ease;
 }
+
+/* Animations */
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 30px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 30px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
+@-webkit-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+
+/* header styling */
+header {
+  min-height: 60px;
+  padding: 10px;
+  box-shadow: 0 0 13px #ccc;
+  display: flex;
+  flex-direction: row;
+}
+header .logo {
+  max-width: 110px;
+  flex-grow: 2;
+}
+header .logo img {
+  width: 100%;
+}
+header nav {
+  flex-grow: 8;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  text-transform: uppercase;
+}
+header nav a{
+  float: right;
+  padding: 10px;
+}
+header nav a:hover {
+  color: #ef5350;
+}
+header div{
+  flex-grow: 1;
+}
+.screen {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('../img/delivery1.jpg') ;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: calc(100vh - 90px);
+  text-align: center;
+}
+.screen h2, .screen h3, .screen a{
+  font-size: 4rem;
+  position: relative;
+  top: 20%;
+  background: transparent;
+  color: #fff;
+}
+.screen h3{
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+.screen a {
+  top: 25%;
+  display: block;
+  font-size: 2rem;
+  text-transform: uppercase;
+  background: #ef5350;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+}
+.screen a:hover{
+  background: #ea302d;
+}
