@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html oncontextmenu="return false;" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Send-It - Parcel Delivery Service </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" description="Emmanuel Daniel">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/main.css" />
+  </head>
+  <body>
+    <header>
+      <a href="./" class="logo"> <img src="./assets/img/logo.png" /></a>
+      <nav>
+        <a href="./">Home</a>
+        <a href="send.html">Send Parcel</a>
+        <a href="account.html">My Account</a>
+      </nav>
+      <div></div>
+    </header>
+
+    <main class="screen">
+      <br/>
+      <br/>
+      <div class="boxes">
+        <div class="b-6">
+        </div>
+        <div class="b-2 box auth">
+          <form action="account.html" id="SignUp" class="hide">
+            <h4 class=""> Sign Up</h4>
+            <br/>
+            <div class="group">
+              <input type="email" required="">
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Email</label>
+            </div>
+            <div class="group">
+              <input type="number" required="">
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Phone</label>
+            </div>
+            <div class="group">
+              <input type="password" required="">
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Password</label>
+            </div>
+            <div class="group">
+              <p> I already have an Account <a href="auth.html?page=signin">Login Here</a></p>
+              <button>Create Account</button>
+              <span class="highlight"></span>
+              <span class="bar"></span>
+            </div>
+          </form>
+
+          <form action="account.html" id="SignIn">
+              <h4 class=""> Sign In </h4>
+              <br/>
+              <div class="group">
+                <input type="email" required="">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Email</label>
+              </div>
+              <div class="group">
+                <input type="password" required="">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Password</label>
+              </div>
+              <div class="group">
+                <p> I Don't have an Account <a href="auth.html?page=signup">Sign Up Here</a></p>
+                <button>Login to Account</button>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+              </div>
+            </form>
+        </div>
+        <div class="b-3">
+        </div>
+      </div>
+    </main>
+
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>
