@@ -392,9 +392,10 @@ header nav .icon {
   text-align: center;
 }
 .screen h2, .screen h3, .screen a.get-started{
+  position: relative !important;
+  top: 20vh;
   font-size: 4rem;
-  position: relative;
-  top: 20%;
+  display: block;
   background: transparent;
   color: #fff;
 }
@@ -403,7 +404,7 @@ header nav .icon {
   font-family: 'Courier New', Courier, monospace;
 }
 .screen a.get-started {
-  top: 25%;
+  top: 30vh;
   display: block;
   font-size: 2rem;
   text-transform: uppercase;
@@ -476,4 +477,14 @@ header nav .icon {
 }
 .show {
   display: block !important;
+}
+.clear-x {
+  clear: both;
+  height: 10px;
+  padding: 10px;
+}
+.clear-xx {
+  clear: both;
+  height: 20px;
+  padding: 20px;
 }
