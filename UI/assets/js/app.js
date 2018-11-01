@@ -30,11 +30,37 @@ const mobileMenu = () => {
 }
 
 /**
+ * include file directly into page
+ */
+const includeFile = (filename)  => {
+  const dataAdd = document.querySelectorAll('[data-add-file]');
+  for (let files of dataAdd){
+    fetch (files.getAttribute('data-add-file'))
+    .then ( (response) => {
+      if (response.status === 200){
+
+        return response.text();
+      }
+      throw Error ('file does not exist');
+    })
+    .then ( (response) => {
+      files.removeAttribute('data-add-file');
+        return files.innerHTML = response;
+    })
+    .catch ((error) => {
+      files.setAttribute('data-error', error);
+      console.log (error);
+    })
+  }
+};
+
+/**
  * initialize all the necessary functions
  */
 const init = () => {
   showAccessPage();
   mobileMenu();
+  includeFile()
   return;
 }
 
