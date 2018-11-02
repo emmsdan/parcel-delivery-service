@@ -181,7 +181,7 @@ button {
   box-shadow: 0 0 22px #999;
   border-radius: 5px;
 }
-input 				{
+input, select {
   font-size:18px;
   padding:5px 10px 10px 5px;
   margin: 0 auto;
@@ -190,7 +190,10 @@ input 				{
   border:none;
   border-bottom:1px solid #757575;
 }
-input:focus 		{ outline:none; }
+input:focus 		{
+  outline:none;
+  border-bottom: 4px solid #5264AE;
+}
 
 label 				 {
   color:#999;
@@ -237,6 +240,7 @@ input:focus ~ label, input:valid ~ label 		{
 
 input:focus ~ .bar:before, input:focus ~ .bar:after {
   width:50%;
+  border-bottom: 12px solid #5264AE;
 }
 
 .highlight {
@@ -368,6 +372,24 @@ header nav .icon {
   }
 
 }
+/* map */
+
+.map {
+  display: block;
+  position: relative;
+  margin: 10px;
+  height: 60vh;
+  overflow: hidden;
+  background: #006064;
+}
+.map::after {
+  content: "google map";
+  color: #E7EDF7;
+  font-size: 3rem;
+  text-align: center;
+  margin: 6rem;
+}
+
 /* side navigation */
 
 nav.side a {
