@@ -77,6 +77,33 @@ const modal = () => {
   }
 }
 
+
+/**
+ * toast bar for notification
+ */
+
+const toast = (message='null') => {
+  let toastMessage;
+  const toastBox =document.querySelector('.toast')
+  if (toastMessage = document.querySelectorAll(`[data-toast]`)){
+    for (let tMsg of toastMessage){
+      tMsg.addEventListener('click', () => {
+        return toast(tMsg.getAttribute('data-toast'));
+      })
+    }
+  }
+  const toast = (message) => {
+    toastBox.innerHTML = message;
+    toastBox.classList.toggle('show');
+    setTimeout(() => {
+      toastBox.classList.remove("show");
+    }, 5000);
+  }
+  if (message !== 'null'){
+    toast(message);
+  }
+}
+
 /**
  * initialize all the necessary functions
  */
@@ -84,6 +111,7 @@ const init = () => {
   showAccessPage();
   mobileMenu();
   modal();
+  toast();
   includeFile()
   return;
 }
