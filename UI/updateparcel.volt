@@ -21,6 +21,10 @@
                 </td>
               </tr>
               <tr>
+                <th>Current Location</th>
+                <td>In transit. (around kabba) </td>
+              </tr>
+              <tr>
                 <th>Weight</th> <td> 20kg </td>
               </tr>
               <tr>

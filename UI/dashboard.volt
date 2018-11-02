@@ -8,7 +8,7 @@
           <div class="b-3 b-t-5">
               <div class="chip">
                 <p class="figure">211</p>
-                Pending
+                Transit
               </div>
           </div>
           <div class="b-3 b-t-5">
