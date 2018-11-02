@@ -24,7 +24,7 @@
       <div class="b-1">
       </div>
 
-      <div class="b-7 b-t-8">
+      <div class="b-7 b-t-8" data-view="app-view">
         <div class="boxes">
           <div class="b-3 b-t-5">
             <div class="chip green">
@@ -83,9 +83,8 @@
     </main>
 
     <div class="toast">..</div>
-    <!-- The Modal -->
+
     <div id="changeDelivery" class="modal">
-      <!-- Modal content -->
       <div class="modal-content">
         <form method="" action="#">
           <div class="content-box parcel no-border">
@@ -110,7 +109,7 @@
                 <th>Approx. Price</th> <td> <strong><del>N</del>2, 000</strong> </td>
               </tr>
               <tr>
-                <th class="blue"><a class="white-text" href="updateparcel.html">Change Destination</a></th>
+                <th class="blue"><a class="white-text close" href="#!updateparcel" onclick="appView(this);">Change Destination</a></th>
                 <th class="red"><a class="white-text" onclick="toast('Order as been Cancel')" href="#cancelparcel.html">Cancel Order</a></th>
               </tr>
             </table>
@@ -118,9 +117,53 @@
         </form>
       </div>
     </div>
-    <div class="addOrderButton">
-      <a href="">+</a>
+
+
+    <!-- Add Modal -->
+    <div id="addOrder" class="modal">
+      <div class="modal-content">
+        <form method="" action="#">
+          <div class="content-box parcel no-border">
+            <h5>Order Details</h5>
+            <table class="form">
+              <tr>
+                <th>Content</th> <td> <input placeholder="Content Description"> </td>
+              </tr>
+              <tr>
+                <th>Pick Up</th>
+                <td>
+                  <input placeholder="Address">
+                  <br /> <input placeholder="Postal Code">
+                </td>
+              </tr>
+              <tr>
+                <th>Destination</th>
+                <td>
+                  <input placeholder="Address">
+                  <br /> <input placeholder="Postal Code">
+                </td>
+              </tr>
+              <tr>
+                <th>Weight</th> <td> <input type="number" placeholder="weight: 20kg" id="weight" min="2"> </td>
+              </tr>
+              <tr>
+                <th>Approx. Price</th> <td> <strong><del>N</del> <span class="pricing">0</span></strong> </td>
+              </tr>
+              <tr>
+                <th> &nbsp; </th>
+                <th class="blue"><a class="white-text close" href="#!updateparcel"> Add to Order </a></th>
+              </tr>
+            </table>
+          </div>
+        </form>
+      </div>
     </div>
+    <!-- Add Icon -->
+    <div class="clear-xx"></div>
+    <div class="addOrderButton" data-target="addOrder">
+      <a href="#">+</a>
+    </div>
+
     <script src="./assets/js/app.js"></script>
   </body>
 </html>
