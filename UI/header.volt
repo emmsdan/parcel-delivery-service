@@ -4,6 +4,6 @@
   <a href="contact.html">About Us</a>
   <a href="faq.html">FAQ</a>
   <a href="account.html">My Account</a>
-  <a href="javascript:void(0);" class="icon show-nav">&#9776;</a>
+  <a href="javascript:void(0);" class="icon show-nav" onclick="mobileMenu(this)">&#9776;</a>
 </nav>
 <div></div>

@@ -19,14 +19,20 @@ const showAccessPage = () => {
  * show & close mobile navigation
  * Responsive mobile nav. bar
 */
-const mobileMenu = () => {
-
-    for (let menu of document.querySelectorAll(".show-nav")){
-      menu.addEventListener('click', () => {
-        const resp = document.querySelector('header nav');
-        resp.classList.toggle ('responsive');
-      })
+const mobileMenu = (m = null) => {
+    if (m === null){
+      for (let menu of document.querySelectorAll(".show-nav")){
+        menu.addEventListener('click', () => {
+          const resp = document.querySelector('header nav');
+          resp.classList.toggle ('responsive');
+        })
+      }
+      return;
     }
+  m.addEventListener('click', () => {
+    const resp = document.querySelector('header nav');
+    resp.classList.toggle ('responsive');
+  })
 }
 
 /**
@@ -45,6 +51,7 @@ const includeFile = (filename)  => {
     })
     .then ( (response) => {
       files.removeAttribute('data-add-file');
+      mobileMenu()
         return files.innerHTML = response;
     })
     .catch ((error) => {
@@ -108,13 +115,12 @@ const toast = (message='null') => {
  * initialize all the necessary functions
  */
 const init = () => {
-  showAccessPage();
   mobileMenu();
+  showAccessPage();
   modal();
   toast();
   includeFile()
   return;
 }
-
 
 init();

@@ -469,20 +469,20 @@ nav.side a.header {
 }
 @media only screen and (min-width: 600px) {
     /* For tablets: */
-    .boxes .b-1 {width: 8.33%;}
-    .boxes .b-2 {width: 16.66%;}
-    .boxes .b-3 {width: 25%;}
-    .boxes .b-4 {width: 33.33%;}
-    .boxes .b-5 {width: 41.66%;}
-    .boxes .b-6 {width: 50%;}
-    .boxes .b-7 {width: 58.33%;}
-    .boxes .b-8 {width: 66.66%;}
-    .boxes .b-9 {width: 75%;}
-    .boxes .b-10 {width: 83.33%;}
-    .boxes .b-11 {width: 91.66%;}
-    .boxes .b-12 {width: 100%;}
+    .boxes .b-t-1 {width: 8.33%;}
+    .boxes .b-t-2 {width: 16.66%;}
+    .boxes .b-t-3 {width: 25%;}
+    .boxes .b-t-4 {width: 33.33%;}
+    .boxes .b-t-5 {width: 41.66%;}
+    .boxes .b-t-6 {width: 50%;}
+    .boxes .b-t-7 {width: 58.33%;}
+    .boxes .b-t-8 {width: 66.66%;}
+    .boxes .b-t-9 {width: 75%;}
+    .boxes .b-t-10 {width: 83.33%;}
+    .boxes .b-t-11 {width: 91.66%;}
+    .boxes .b-t-12 {width: 100%;}
 }
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
     /* For desktop: */
     .boxes .b-1 {width: 8.33%;}
     .boxes .b-2 {width: 16.66%;}
@@ -510,12 +510,8 @@ table {
   overflow: hidden;
 }
 
-table tr:nth-child(even) {
+table.form td, table tr:nth-child(even) {
   background-color: rgb(230, 227, 250)
-}
-
-table tr:nth-child(odd) {
-  background-color: white
 }
 
 table tr td,
@@ -615,6 +611,32 @@ table tr td a:focus {
   animation: fadein 0.5s;
 }
 
+/* order button (floating) */
+.addOrderButton {
+  position: fixed;
+  top: 85%;
+  left: 86%;
+}
+.addOrderButton a {
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 13px #666f73;
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  text-align: center;
+  display: block;
+  background: #fb3d3a;
+  color: #fefefe;
+  font-size: 1.9rem;
+}
+.addOrderButton a:hover {
+  background: #00897b;
+  color: #fefefe;
+  width: 59px;
+  height: 59px;
+  padding: 10px;
+}
 /* helper classes */
 
 .uppercase {
