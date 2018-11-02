@@ -55,11 +55,35 @@ const includeFile = (filename)  => {
 };
 
 /**
+ * allow modals
+ */
+const modal = () => {
+  var button = document.querySelectorAll("[data-target]");
+  for (let btn of button){
+    btn.addEventListener('click', () => {
+      const modal = document.querySelector(`#${btn.getAttribute('data-target')}`);
+      modal.style.display = "flex";
+      modal.querySelectorAll('.close').forEach((elem, ind) => {
+        elem.addEventListener('click', () => {
+          modal.style.display = "none";
+        });
+      })
+      window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+      })
+    })
+  }
+}
+
+/**
  * initialize all the necessary functions
  */
 const init = () => {
   showAccessPage();
   mobileMenu();
+  modal();
   includeFile()
   return;
 }
