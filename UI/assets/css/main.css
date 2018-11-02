@@ -433,7 +433,7 @@ nav.side a.header {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('../img/bg.jpg') ;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: calc(100vh - 68px);
+  min-height: 100vh;
   text-align: center;
 }
 .screen h2, .screen h3, .screen a.get-started{
@@ -461,6 +461,31 @@ nav.side a.header {
 }
 .screen a.get-started:hover{
   background: #ea302d;
+}
+@media screen and (max-width: 650px) {
+  .screen h2, .screen h3, .screen a.get-started{
+    top: 10vh;
+    font-size: 3rem;
+  }
+  .screen h3{
+    font-size: 2rem;
+  }
+  .screen a.get-started {
+    top: 15vh;
+    font-size: 1.6rem;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .screen h2, .screen h3, .screen a.get-started{
+    font-size: 2.2rem;
+  }
+  .screen h3{
+    font-size: 1.7rem;
+  }
+  .screen a.get-started {
+    font-size: 1.3rem;
+  }
 }
 /* authentication */
 .auth {
