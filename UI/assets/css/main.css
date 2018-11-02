@@ -598,21 +598,21 @@ table tr td a:focus {
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
-  background-color: #333;
-  color: #fff;
+  background-color: rgb(248, 236, 191);
+  color: #000;
   text-align: center;
   border-radius: 2px;
   padding: 16px;
   position: fixed;
-  z-index: 2;
+  z-index: 21;
   left: 50%;
   top: 30px;
 }
 
 .toast.show {
   visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  -webkit-animation: fadein 0.5s;
+  animation: fadein 0.5s;
 }
 
 /* helper classes */
