@@ -112,6 +112,25 @@ const toast = (message='null') => {
 }
 
 /**
+ * AppView: allow loading external page into it
+ */
+const appView = (e) => {
+  const shell = document.querySelector('[data-view]');
+  fetch (`${e.getAttribute('href').split('#!')[1]}.volt`)
+  .then ( (response) => {
+    if (response.status === 200) {
+      return response.text().then ( (resp) => {
+        shell.innerHTML = resp;
+        toast ('Page Loaded')
+      })
+    }
+    throw Error ('Page was not found');
+  })
+  .catch ((error) => {
+    toast (`Could not Load Page because ${error}`)
+  })
+}
+/**
  * initialize all the necessary functions
  */
 const init = () => {
