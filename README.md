@@ -1,6 +1,8 @@
 # parcel-delivery-service
 A courier service that helps users deliver parcels to different destinations. It provides courier quotes based on weight categories.
 
+[![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=master)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=master)
+
 ## This project is part of the Andela Fellowship Bootcamp Challenge.
 
 I created a set of API endpoints as defined below and used data structures
