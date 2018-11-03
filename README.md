@@ -1,7 +1,7 @@
 # parcel-delivery-service
 A courier service that helps users deliver parcels to different destinations. It provides courier quotes based on weight categories.
 
-[![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=master)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=master)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=api-endpoints)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
 
