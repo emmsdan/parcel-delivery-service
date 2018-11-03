@@ -130,6 +130,12 @@ a {
 .white-text {
   color: #fff;
 }
+.fade-bg {
+  background: rgba(0, 0, 0, 0.298) !important;
+}
+.fade-text {
+  color: rgba(0, 0, 0, 0.298);
+}
 .green {
   background: #04c655 !important;
   color: #fff;
