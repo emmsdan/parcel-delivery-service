@@ -4,10 +4,10 @@
   "description": "a courier service that helps users deliver parcels to different destinations. SendIT",
   "main": "app.js",
   "scripts": {
-    "build": "babel src -d build",
+    "build": "babel ./ -d build",
     "start": "nodemon --exec babel-node src/server.js",
     "serve": "node dist/server.js",
-    "test": "mocha"
+    "test": "mocha --require babel-register"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -32,5 +33,10 @@
   },
   "dependencies": {
     "express": "^4.16.4"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }
