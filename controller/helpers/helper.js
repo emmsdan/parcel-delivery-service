@@ -1,6 +1,7 @@
 export const newDate = () => new Date().toString()
+
 export const inArray = (array, id, value) => {
-    let row = array.filter(( r ) => {
+    let row = array.find(( r ) => {
       return r.id == value
     });
     if (!row) {
