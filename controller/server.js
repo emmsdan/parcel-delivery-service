@@ -7,7 +7,10 @@ import parcelRouter from  './routes/parcel.route'
 import errorRouter from  './routes/error.route'
 
 const app = express()
-const port = 5000
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
 
 app.get('/', (req, res) => {
   res.json('Hello World!')
