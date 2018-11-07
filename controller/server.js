@@ -13,10 +13,10 @@ app.get('/', (req, res) => {
   res.json('Hello World!')
 })
 
-app.use ('api/v1/users', userRouter);
-app.use ('api/v1/admin', adminRouter);
-app.use ('api/v1/access', authRouter);
-app.use ('api/v1/parcel', parcelRouter);
+app.use ('/api/v1/users', userRouter);
+app.use ('/api/v1/admin', adminRouter);
+app.use ('/api/v1/access', authRouter);
+app.use ('/api/v1/parcel', parcelRouter);
 
 // handles error pages like 404
 app.use ('*', errorRouter);
