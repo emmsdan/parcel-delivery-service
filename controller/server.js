@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 
 import userRouter from  './routes/users.route'
 import adminRouter from  './routes/parcel.route'
@@ -6,7 +7,9 @@ import authRouter from  './routes/authenicator.route'
 import parcelRouter from  './routes/parcel.route'
 import errorRouter from  './routes/error.route'
 
-const app = express()
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
