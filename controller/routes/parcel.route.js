@@ -1,30 +1,9 @@
 import express from'express';
-import parcelOrder from '../models/parcel.model';
 import bodyParser from 'body-parser';
+import parcelOrder from '../models/parcel.model';
 
 const parcelRouter = express.Router();
-const parcels = new parcelOrder([
-  {
-    userid : 3232,
-    id : 123,
-    content: "iPhone 8+",
-    pickup: "Ojota Bus stop",
-    destination: "Anthony Bus Stop",
-    currentLocation: "K2",
-    weight: 322,
-    status: "pending"
-  },
-  {
-    userid : 3232,
-    id : 1234,
-    content: "iPhone 8+",
-    pickup: "Ojota Bus stop",
-    destination: "Anthony Bus Stop",
-    currentLocation: "K2",
-    weight: 322,
-    status: "pending"
-  }
-]);
+const parcels = new parcelOrder();
 
 // get all parcels.
 parcelRouter.get('/',  ( req, res ) => {
@@ -48,7 +27,13 @@ parcelRouter.post('/', ( req, res ) => {
 
 // update parcel
 parcelRouter.post('/update', ( req, res ) => {
-
+  if (req.body.status){
+    let resp = parcels.updateParcel(req.body.parcelID,'status', req.body.status)
+  }else{
+    let resp = parcels.updateParcel(req.body.parcelID,req.body)
+  }
+  res.json(resp)
 })
 
+module.exports = parcels;
 module.exports = parcelRouter;
