@@ -9,3 +9,6 @@ export const inArray = (array, id, value) => {
     }
     return (row)
 }
+export const generateID = (max) => {
+  return Math.random() * (max - 100) + 100;
+}
