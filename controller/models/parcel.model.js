@@ -21,7 +21,7 @@ class parcelOrder {
     if(parcel){
       return parcel;
     }else{
-      return {'message': 'no parcel for this user', 'date': this.parcels.filter( r => r.userid !== use)}
+      return {'message': 'no parcel for this user'}
     }
   }
 
