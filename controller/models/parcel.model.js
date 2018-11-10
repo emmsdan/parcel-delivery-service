@@ -1,6 +1,6 @@
 import {inArray, removeArray, generateID} from '../helpers/helper';
 
-export default class parcelOrder {
+class parcelOrder {
   constructor (parcels) {
     this.parcels = parcels;
   }
@@ -17,7 +17,12 @@ export default class parcelOrder {
   }
 
   getUserParcels (userid) {
-    return this.parcels.find( parcels => parcels.userid == userid);
+    const parcel = this.parcels.find( parcels => parcels.userid == userid);
+    if(parcel){
+      return parcel;
+    }else{
+      return {'message': 'no parcel for this user', 'date': this.parcels.filter( r => r.userid !== use)}
+    }
   }
 
   removeParcel (parcelId) {
@@ -68,3 +73,5 @@ export default class parcelOrder {
     }
   }
 }
+const parcels = new parcelOrder([]);
+export default parcels;
