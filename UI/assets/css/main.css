@@ -117,13 +117,18 @@ a {
   text-decoration: none;
   color: #15537D;
 }
+@media screen and (min-width: 763px){
+  main {
+    padding-left: 45px;
+  }
+}
 /* basic color code */
 
 .white {
   background: #fff !important;
 }
 .white-text {
-  color: #fff;
+  color: #fff !important;
 }
 .fade-bg {
   background: rgba(0, 0, 0, 0.298) !important;
@@ -392,7 +397,9 @@ header nav .icon {
 }
 
 /* side navigation */
-
+nav.side {
+  animation: fadein 6s;
+}
 nav.side a {
   background-color: #eee;
   color: black;
@@ -410,13 +417,17 @@ nav.side a:hover {
   background-color: rgba(0, 0, 0, 0.298); /* Add a green color to the "active/current" link */
   color: white;
 }
-nav.side a.header {
+nav.side a.header, nav.side a.headerBtn {
   font-weight: 800;
   font-size: 4vh;
   background: #fff;
   box-shadow: 0 0 12px #999;
   color: #000;
   text-transform: uppercase;
+}
+nav.side a.headerBtn  {
+  font-size: 1.4rem;
+  box-shadow: 0 0 12px #123;
 }
 
 /* contents */
@@ -514,12 +525,15 @@ nav.side a.header {
 /* For mobile phones: */
 [class*="b-"] {
     width: 100%;
+    margin-top: 5px;
 }
 @media only screen and (min-width: 600px) {
     /* For tablets: */
     .boxes .b-t-1 {width: 8.33%;}
     .boxes .b-t-2 {width: 16.66%;}
+    .boxes .b-t-2-5 {width: 20%;}
     .boxes .b-t-3 {width: 25%;}
+    .boxes .b-t-3-5 {width: 29%;}
     .boxes .b-t-4 {width: 33.33%;}
     .boxes .b-t-5 {width: 41.66%;}
     .boxes .b-t-6 {width: 50%;}
@@ -534,7 +548,9 @@ nav.side a.header {
     /* For desktop: */
     .boxes .b-1 {width: 8.33%;}
     .boxes .b-2 {width: 16.66%;}
+    .boxes .b-2-5 {width: 22%;}
     .boxes .b-3 {width: 25%;}
+    .boxes .b-3-5 {width: 28%;}
     .boxes .b-4 {width: 33.33%;}
     .boxes .b-5 {width: 41.66%;}
     .boxes .b-6 {width: 50%;}
@@ -697,7 +713,7 @@ table tr td a:focus {
   display: block !important;
 }
 .xx-text {
-  font-size: 1.4rem;
+  font-size: 1.4rem !important;
 }
 .clear-x {
   clear: both;
@@ -711,6 +727,10 @@ table tr td a:focus {
 }
 .w90p {
   width: 90%;
+  margin: auto;
+}
+.w98p {
+  width: 98%;
   margin: auto;
 }
 
@@ -731,10 +751,11 @@ table tr td a:focus {
   display: inline-block;
   padding: 0 25px;
   height: 50px;
+  width: 100%;
   font-size: 16px;
   line-height: 50px;
   border-radius: 25px;
-  background-color: #ffc800;
+  background-color: #fff;
   box-shadow: 0 0 13px #999;
 }
 
@@ -742,13 +763,13 @@ table tr td a:focus {
   color: #000;
   text-align: center;
   box-shadow: 0 0 13px rgba(0, 0, 0, 0.298);
-  float: left;
   margin: 0 10px 0 -25px;
   height: 50px;
   width: 50px;
   border-radius: 50%;
+  display: inline-block !important;
+  float: left;
 }
-
 
 .collapsible:after {
   content: '\02795'; /* Unicode character for "plus" sign (+) */
