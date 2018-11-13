@@ -130,6 +130,31 @@ const appView = (e) => {
     toast (`Could not Load Page because ${error}`)
   })
 }
+
+
+/**
+  * allow collapsible content
+*/
+const collapsible = () => {
+  for (let collapse of document.querySelectorAll(".collapsible")) {
+    collapse.addEventListener("click", function() {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+      console.log ('before', content.style.maxHeight)
+      if (!content.style.maxHeight.endsWith('px')){
+        for (let removeActive of document.querySelectorAll(".collapse-content")) {
+          removeActive.style.maxHeight = null;
+        }
+        content.style.maxHeight = content.scrollHeight + "px";
+      } else {
+        content.style.maxHeight = null;
+      }
+      console.log ('after', content.style.maxHeight)
+    });
+  }
+}
+
+
 /**
  * initialize all the necessary functions
  */
@@ -139,6 +164,7 @@ const init = () => {
   modal();
   toast();
   includeFile()
+  collapsible();
   return;
 }
 

@@ -748,3 +748,33 @@ table tr td a:focus {
   width: 50px;
   border-radius: 50%;
 }
+
+
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+.collapsible.active:after, .collapsible .active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+.collapse-content {
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.collapse-content img {
+  width: auto !important;
+}
+.notification div {
+  padding: 18px;
+  border-bottom: 0.5px solid #888;
+}
