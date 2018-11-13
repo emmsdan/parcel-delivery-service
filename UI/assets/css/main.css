@@ -439,7 +439,7 @@ nav.side a.header {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('../img/bg.jpg') ;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
   text-align: center;
 }
 .screen h2, .screen h3, .screen a.get-started{
@@ -700,6 +700,9 @@ table tr td a:focus {
 }
 .show {
   display: block !important;
+}
+.xx-text {
+  font-size: 1.4rem;
 }
 .clear-x {
   clear: both;
