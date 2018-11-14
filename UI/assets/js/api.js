@@ -1,6 +1,6 @@
 window.addEventListener ('load', () => {
-  const apiHost = 'emmsdan:5000/api/v1/'
-  fetch (`${apiHost}parcels`)
+  const apiHost = 'https://postman.com/get'
+  fetch (`${apiHost}`)
   .then ((response) => {
     return response.json();
   })

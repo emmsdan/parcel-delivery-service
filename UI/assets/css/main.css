@@ -175,7 +175,7 @@ a {
 .group 			  {
   position:relative;
   margin: 0 auto;
-  margin-bottom:30px;
+  margin-bottom:50px;
 }
 button {
   width: fit-content;
@@ -187,7 +187,7 @@ button {
   box-shadow: 0 0 22px #999;
   border-radius: 5px;
 }
-input, select {
+input, select, textarea {
   font-size:18px;
   padding:5px 10px 10px 5px;
   margin: 0 auto;
@@ -196,25 +196,28 @@ input, select {
   border:none;
   border-bottom:1px solid #757575;
 }
-input:focus 		{
+input:focus, textarea:focus 		{
   outline:none;
   border-bottom: 4px solid #5264AE;
 }
-
+textarea {
+  overflow: hidden;
+  height: auto;
+}
 label 				 {
   color:#999;
   font-size:18px;
   font-weight:normal;
   position:absolute;
   pointer-events:none;
-  left:5px;
+  left:6%;
   top:10px;
   transition:0.2s ease all;
   -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
 
-input:focus ~ label, input:valid ~ label 		{
+input:focus ~ label, input:valid ~ label, textarea:focus ~ label, textarea:valid ~ label	{
   top:-20px;
   font-size:14px;
   color:#5264AE;
@@ -224,7 +227,7 @@ input:focus ~ label, input:valid ~ label 		{
   position:relative;
   display:block;
   margin: 0 auto;
-  width: 90%;
+  width: 0;
 }
 .bar:before, .bar:after 	{
   content:'';
@@ -433,7 +436,7 @@ nav.side a.headerBtn  {
 /* contents */
 
 .box {
-  background: var(--theme-content-bg);
+  background: #fff;
   margin: 0 auto;
   padding: 15px 10px;
   box-shadow: 0 0 3px #ccc;
@@ -798,4 +801,27 @@ table tr td a:focus {
 .notification div {
   padding: 18px;
   border-bottom: 0.5px solid #888;
+}
+
+.uploadImage {
+  min-width: 60px;
+  min-height: 150px;
+  max-width: 90%;
+  background: #999;
+  border-radius: 50%;
+  margin: 0 auto;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.4;
+}
+.uploadImage img {
+  width: 100%;
+}
+.uploadImage:hover {
+  opacity: 0.8;
+}
+
+input:disabled {
+  color: #000 !important;
+
 }

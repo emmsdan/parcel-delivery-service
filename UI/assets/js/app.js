@@ -2,7 +2,7 @@
  * select sign in/ sign up page
 **/
 const showAccessPage = () => {
-  const addressbar  = window.location.href.split('.html?page=')[1] || 'none';
+  const addressbar  = window.location.href.split('.html?page=')[1] || window.location.href.split('/')[1];
   if (addressbar.startsWith('sign')){
     let forms = document.querySelectorAll(`form`);
     for (let form of forms){
@@ -12,6 +12,8 @@ const showAccessPage = () => {
         form.classList.remove ('hide');
       }
     }
+  }else if(addressbar.startsWith('orderCreate')) {
+    return calculateWeight ();
   }
 }
 
@@ -154,8 +156,46 @@ const collapsible = () => {
   }
 }
 
+/**
+ * uploadImage
+ */
+const showImage = (file) => {
+  if (file.files && file.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.querySelector('#uploadImage').src = e.target.result;
+      document.querySelector('.uploadImage').style = 'opacity: 1; border-radius: 0;'
+    };
+    reader.readAsDataURL(file.files[0]);
+  }
+}
 
 /**
+ * calculateWeight()
+ */
+const calculateWeight = () => {
+  const weight  = document.querySelector ('.weight');
+  const priceBar  = document.querySelector ('.price');
+  weight.addEventListener ('keyup', () => {
+    priceBar.innerHTML = (parseInt(weight.value) * 2000) || 0;
+  })
+}
+
+/**
+ * make textareaAutoResize
+ */
+const textareaAutoResize = () => {
+  for (let textarea of document.querySelectorAll('textarea')){
+    textarea.addEventListener ('keyup', () => {
+      if (textarea.value.length > 150 || textarea.scrollHeight > 100 && textarea.scrollHeight < 500){
+        textarea.style.height = textarea.scrollHeight+'px';
+        return;
+      }
+      textarea.style.height = '50px';
+    })
+  }
+}
+   /**
  * initialize all the necessary functions
  */
 const init = () => {
@@ -165,6 +205,7 @@ const init = () => {
   toast();
   includeFile()
   collapsible();
+  calculateWeight();
   return;
 }
 
