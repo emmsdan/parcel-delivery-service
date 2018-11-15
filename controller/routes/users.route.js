@@ -13,5 +13,9 @@ userRouter.get('/:userId/parcels', ( req, res ) => {
   res.json(userDb.getUserParcels(req.params.userId));
 });
 
+// get user parcels
+userRouter.get('/admin', ( req, res ) => {
+  res.json(userDb.getAllUsers());
+});
 
 module.exports = userRouter;
