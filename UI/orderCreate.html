@@ -15,19 +15,8 @@
     <div class="clear-xx"></div>
     <form>
     <main class="boxes w98p center">
-        <div class="b-3 card">
-          <nav class="side white">
-            <a href="" class="header"> Enter Order Details </a>
-            <div class="uploadImage" onclick="document.querySelector('#image').click();">
-              <input type="file" onchange="showImage(this)" name="image" id="image" style="display:none;"/>
-              <img src="./assets/img/camera.png" id="uploadImage"/>
-            </div>
-          </nav>
-        </div>
-        <div class="b-1">
-        </div>
-
-        <div class="b-7 b-t-8 white" data-view="app-view">
+      <div class="b-2"></div>
+        <div class="b-7 b-t-7 white card" data-view="app-view">
           <div class="clear-xx"></div>
           <div class="group">
             <input type="text" required>
@@ -49,13 +38,66 @@
             <span class="highlight"></span>
             <label>Price: <del>N</del><span class="price"></span></label>
           </div>
-          <h6 class="center">Pick Up & Delivery Details</h6>
+
+
+          <div class="center w200px">
+            <a data-target='myModal' class="ImageAction hide">view Image</a>
+          </div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <img class="modal-content" id="smallImage">
+</div>
+          <div class="group">
+              <input type="file" onchange="showImage(this)" name="image" id="image"/>
+            <span class="highlight"></span>
+          </div>
+
+          <h6 class="center-text">Pick Up & Delivery Details</h6>
+
           <div class="group ">
             <input type="text" required class="">
             <span class="highlight"></span>
-            <label>Price: <del>N</del><span class="price"></span></label>
+            <label>Pickup Personels Name</label>
           </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>PickUp Address</label>
+          </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>PickUp Code</label>
+          </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>Destination Personel's Name</label>
+          </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>Destination Address</label>
+          </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>Destination Code</label>
+          </div>
+          <div class="center w200px">
+            <button type="text" required class="xx-text">Process Order</button>
+          </div>
+          <div class="clear-xx"></div>
         </div>
+
+        <div class="b-1 hide">
+            <nav class="side white card fixed">
+              <div class="uploadImage" onclick="document.querySelector('#image').click();">
+                <input type="file" onchange="showImage(this)" name="image" id="image" style="display:none;"/>
+                <img src="./assets/img/camera.png" id="uploadImage"/>
+              </div>
+            </nav>
+          </div>
     </main>
 
   </form>
