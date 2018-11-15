@@ -14,7 +14,29 @@ if (port == null || port == "") {
 }
 
 app.get('/', (req, res) => {
-  res.json('Hello World!')
+  res.send(`
+  <link rel='stylesheet' href='https://emmsdan.github.io/parcel-delivery-service/UI/assets/css/main.css' />
+  <h2> create user </h2>
+  <form action="/api/v1/users/create" method="post">
+    <input name="name"> name <br>
+    <input name="email"> email <br>
+    <input name="phone"> phone <br>
+    <input name="password"> password <br><br>
+      <button type='submit'> submit </button>
+  </form>
+  <br/>
+  <br/>
+  <h2> create parcel </h2>
+  <form action="/api/v1/parcel" method="post">
+    <input name="userid"> userid <br>
+    <input name="content"> content <br>
+    <input name="pickup"> pickup <br>
+    <input name="pickupcode"> pickupcode <br>
+    <input name="destination"> destination <br>
+    <input name="destinationcode"> destinationcode <br>
+    <input name="weight"> weight <br><br>
+      <button type='submit'> submit </button>
+  </form>`)
 })
 
 app.use ('/api/v1/users', userRouter);
