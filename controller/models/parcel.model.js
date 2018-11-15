@@ -49,7 +49,8 @@ class parcelOrder {
       pickupcode: order.pickupcode,
       destination: order.destination,
       destinationcode: order.destinationcode,
-      weight: order.weight
+      weight: order.weight,
+      status : 'pending'
     });
   }
   updateParcel (id, field, value = null){
@@ -62,9 +63,20 @@ class parcelOrder {
     parcel.destinationcode = field.destinationcode;
     return 'destination has been updated';
   }
+  cancelParcel (id){
+    const parcel = this.getSingleParcel (id);
+    if (typeof parcel === 'object'){
+      if (parcel.status === 'transit' && parcel.status === 'delivered'){
+        return `This parcel cannot be canceled, It status is ${parcel.status}`
+      }
+      parcel.status = 'canceled';
+      return 'This parcel has be canceled';
+    }
+    return 'parcel not found'
+  }
   orderExist (id) {
     try {
-      if(this.parcels.find( parcels => parcels.userid == id).length > 0 ){
+      if(this.parcels.find( parcels => parcels.userid == id)){
         return true;
       }
       return false;
@@ -73,5 +85,5 @@ class parcelOrder {
     }
   }
 }
-const parcels = new parcelOrder([]);
-export default parcels;
+
+export default parcelOrder
