@@ -117,7 +117,8 @@ a {
   color: #15537D;
 }
 body {
-  background:  linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../img/water.png');
+  background:  linear-gradient(rgba(255, 255, 255, 0.315), rgba(255, 255, 255, 0.281)), url('../img/w.png');
+  background-color: rgb(11, 115, 146);
 }
 @media screen and (min-width: 763px){
   main {
@@ -312,7 +313,7 @@ header {
   box-shadow: 0 0 22px #123;
   display: flex;
   flex-direction: row;
-  background: #097068 ;
+  background: #fff ;
 }
 header .logo {
   max-width: 110px;
@@ -332,7 +333,7 @@ header nav {
 header nav a{
   float: right;
   padding: 10px;
-  color: #fff;
+  color: rgb(11, 115, 146);
 }
 header nav a:hover {
   color: #ef5350;
@@ -433,7 +434,7 @@ nav.side a.header, nav.side a.headerBtn {
 }
 nav.side a.headerBtn  {
   font-size: 1.4rem;
-  box-shadow: 0 0 12px #123;
+  box-shadow: none;
 }
 
 /* contents */
@@ -576,12 +577,12 @@ nav.side a.headerBtn  {
 
 table {
   width: 100%;
-  border-radius: 15px;
   overflow: hidden;
+  background-color: rgb(230, 227, 250);
 }
 
 table.form td, table tr:nth-child(even) {
-  background-color: rgb(230, 227, 250)
+  background-color: rgba(168, 168, 172, 0.596)
 }
 
 table tr td,
@@ -593,9 +594,9 @@ table tr th {
 }
 
 table tr th {
-  font-weight: 700;
-  background-color: rgb(120, 144, 156);
-  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000;
 }
 
 table tr td a {
@@ -604,8 +605,6 @@ table tr td a {
   padding: 10px 30px;
   text-align: center;
   min-width: 200px;
-  border-radius: 5px;
-  box-shadow: 0 0 14px #aaa;
 }
 
 table tr td a:hover,
@@ -755,12 +754,13 @@ table tr td a:focus {
 
 .chip {
   display: inline-block;
-  padding: 0 25px;
+  padding: 0 20px;
+  margin-right: 14px;
   height: 50px;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   font-size: 16px;
   line-height: 50px;
-  border-radius: 25px;
   background-color: #fff;
   box-shadow: 0 0 13px #999;
 }
