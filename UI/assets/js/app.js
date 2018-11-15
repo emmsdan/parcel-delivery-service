@@ -163,8 +163,9 @@ const showImage = (file) => {
   if (file.files && file.files[0]) {
     const reader = new FileReader();
     reader.onload = (e) => {
-      document.querySelector('#uploadImage').src = e.target.result;
-      document.querySelector('.uploadImage').style = 'opacity: 1; border-radius: 0;'
+      const imageholder = document.querySelector('#smallImage');
+      imageholder.src = e.target.result;
+      document.querySelector( '.ImageAction').setAttribute('class', 'ImageAction show')
     };
     reader.readAsDataURL(file.files[0]);
   }
