@@ -21,7 +21,8 @@ describe ( 'Parcel API Routes', () => {
         content : 'iphone 6+ with hp 665 notepad',
         weight : 23,
         pickup : 'Ikeja, Lagos Nigeria',
-        destination : 'Ojota, Lagos Nigeria'
+        destination : 'Ojota, Lagos Nigeria',
+        status : 'pending'
       })
       .expect(200)
       .end( (err, res) => {
@@ -43,7 +44,7 @@ describe ( 'Parcel API Routes', () => {
     });
   });
   describe('GET /api/v1/parcel/:parcelID/cancel', () => {
-    it('should remove item from list', (done) => {
+    it('should Change order status to cancel', (done) => {
       request.get('/api/v1/parcel/1023/cancel')
       .expect(200)
       .end( (err, res) => {
@@ -53,5 +54,4 @@ describe ( 'Parcel API Routes', () => {
       });
     });
   });
-
 })
