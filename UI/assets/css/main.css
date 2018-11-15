@@ -8,7 +8,6 @@ html {
   font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  background: #365e9e ;
   scroll-behavior: smooth;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -116,6 +115,9 @@ h6 {
 a {
   text-decoration: none;
   color: #15537D;
+}
+body {
+  background:  linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('../img/water.png');
 }
 @media screen and (min-width: 763px){
   main {
@@ -310,7 +312,7 @@ header {
   box-shadow: 0 0 22px #123;
   display: flex;
   flex-direction: row;
-  background: #fff;
+  background: #097068 ;
 }
 header .logo {
   max-width: 110px;
@@ -330,6 +332,7 @@ header nav {
 header nav a{
   float: right;
   padding: 10px;
+  color: #fff;
 }
 header nav a:hover {
   color: #ef5350;
