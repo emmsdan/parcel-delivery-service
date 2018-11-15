@@ -182,13 +182,12 @@ body {
 }
 button {
   width: fit-content;
-  background: #0277bd;
+  background: #366376;
   color: #fff;
   padding: 15px;
   cursor: pointer;
   border: none;
   box-shadow: 0 0 22px #999;
-  border-radius: 5px;
 }
 input, select, textarea {
   font-size:18px;
@@ -404,9 +403,6 @@ header nav .icon {
 }
 
 /* side navigation */
-nav.side {
-  animation: fadein 6s;
-}
 nav.side a {
   background-color: #eee;
   color: black;
@@ -809,16 +805,19 @@ table tr td a:focus {
 .uploadImage {
   min-width: 60px;
   min-height: 150px;
-  max-width: 90%;
+  max-width: 500px;
   background: #999;
-  border-radius: 50%;
   margin: 0 auto;
   overflow: hidden;
   cursor: pointer;
   opacity: 0.4;
 }
-.uploadImage img {
+.uploadImage:hover{
+  overflow-y: scroll;
+}
+.uploadImage img,{
   width: 100%;
+  height: 100%;
 }
 .uploadImage:hover {
   opacity: 0.8;
@@ -827,4 +826,19 @@ table tr td a:focus {
 input:disabled {
   color: #000 !important;
 
+}
+.card {
+  box-shadow: 0 0 12px rgba(17, 16, 16, 0.829);
+}
+.fixed {
+  position: fixed;
+}
+.center-text {
+  text-align: center;
+}
+.center {
+  margin: auto;
+}
+.w200px {
+  width: 200px;
 }
