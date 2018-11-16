@@ -1,1 +1,1 @@
-web: node controller/server.js
+web: babel-node  controller/server.js

@@ -28,10 +28,10 @@ class parcelOrder {
   removeParcel (parcelId) {
     const deleteOrder= this.parcels.find(p => p.id === parseInt(parcelId))
     if (!deleteOrder){
-      return ('This order does not exist');
+      return {'message':'This order does not exist', countParcel : this.parcels.length};
     } else {
       this.parcels.splice(this.parcels.indexOf(deleteOrder), 1)
-      return ('This Order has been deleted');
+      return {'message':'This Order has been deleted', countParcel : this.parcels.length};
     }
   }
 
@@ -52,6 +52,7 @@ class parcelOrder {
       weight: order.weight,
       status : 'pending'
     });
+    return {'message': 'parcel order created', countParcel : this.parcels.length}
   }
   updateParcel (id, field, value = null){
     if (value !== null){
