@@ -165,7 +165,7 @@ const showImage = (file) => {
     reader.onload = (e) => {
       const imageholder = document.querySelector('#smallImage');
       imageholder.src = e.target.result;
-      document.querySelector( '.ImageAction').setAttribute('class', 'ImageAction show')
+      document.querySelector( '.ImageAction').setAttribute('class', 'ImageAction show btn')
     };
     reader.readAsDataURL(file.files[0]);
   }
