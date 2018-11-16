@@ -273,13 +273,13 @@ input:focus ~ .highlight {
 /* Animations */
 
 @-webkit-keyframes fadein {
-  from {top: 0; opacity: 0;}
-  to {top: 30px; opacity: 1;}
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
 @keyframes fadein {
-  from {top: 0; opacity: 0;}
-  to {top: 30px; opacity: 1;}
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
@@ -841,4 +841,17 @@ input:disabled {
 }
 .w200px {
   width: 200px;
+}
+.btn {
+  padding: 10px;
+  min-height: 40px;
+  background: #559DB3;
+  text-align: center;
+  color: #fff;
+  font-weight: 800;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+.modal {
+  animation: fadein 2s;
 }
