@@ -53,7 +53,7 @@ class ParcelOrder {
     }
 
     this.parcels.push ({
-      userid: order.userid,
+      userid: order.userId,
       id: orderId,
       content: order.content,
       pickup: order.pickup,
