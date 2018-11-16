@@ -51,6 +51,13 @@ class ParcelOrder {
     if (this.orderExist(orderId)){
       orderId = (this.parcels - 1) + (orderId * 2);
     }
+    console.log (order)
+    if (order.userId === undefined){
+      return {'message' : 'UserId not specified: Order Must belong to a User'};
+    }
+    if (order.content === undefined || order.pickup === undefined || order.pickupcode === undefined || order.destination === undefined || order.destinationcode === undefined || order.weight === undefined){
+      return {'message' : 'Order Details can\'t be empty'};
+    }
 
     this.parcels.push ({
       userid: order.userId,
