@@ -14,9 +14,9 @@
     <div class="clear-xx"></div>
     <div class="clear-xx"></div>
     <form>
-    <main class="boxes w98p center">
-      <div class="b-2"></div>
-        <div class="b-7 b-t-7 white card" data-view="app-view">
+    <main class="w90p center boxes">
+      <div class="b-3"></div>
+        <div class="white card b-6" data-view="app-view">
           <div class="clear-xx"></div>
           <div class="group">
             <input type="text" required>
@@ -28,20 +28,22 @@
             <span class="highlight"></span>
             <label>Parcel Desc.</label>
           </div>
-          <div class="group">
-            <input type="text" required class="weight">
-            <span class="highlight"></span>
-            <label>Weight</label>
-          </div>
-          <div class="group ">
-            <input type="text" disabled required class="weight">
-            <span class="highlight"></span>
-            <label>Price: <del>N</del><span class="price"></span></label>
+          <div class="boxes">
+            <div class="group">
+              <input type="text" required class="weight">
+              <span class="highlight"></span>
+              <label>Weight</label>
+            </div>
+            <div class="group ">
+              <input type="text" disabled required class="weight">
+              <span class="highlight"></span>
+              <label>Price: <del>N</del><span class="price"></span></label>
+            </div>
           </div>
 
 
           <div class="center w200px">
-            <a data-target='myModal' class="ImageAction hide">view Image</a>
+            <a data-target='myModal' class="ImageAction hide btn">view Image</a>
           </div>
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -52,7 +54,7 @@
             <span class="highlight"></span>
           </div>
 
-          <h6 class="center-text">Pick Up & Delivery Details</h6>
+          <h6 class="center-text blue-text">Pick Up & Delivery Details</h6>
 
           <div class="group ">
             <input type="text" required class="">
@@ -89,15 +91,6 @@
           </div>
           <div class="clear-xx"></div>
         </div>
-
-        <div class="b-1 hide">
-            <nav class="side white card fixed">
-              <div class="uploadImage" onclick="document.querySelector('#image').click();">
-                <input type="file" onchange="showImage(this)" name="image" id="image" style="display:none;"/>
-                <img src="./assets/img/camera.png" id="uploadImage"/>
-              </div>
-            </nav>
-          </div>
     </main>
 
   </form>
