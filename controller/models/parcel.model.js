@@ -1,6 +1,6 @@
 import {inArray, removeArray, generateID} from '../helpers/helper';
 
-export default class parcelOrder {
+class parcelOrder {
   constructor (parcels) {
     this.parcels = parcels;
   }
@@ -17,7 +17,12 @@ export default class parcelOrder {
   }
 
   getUserParcels (userid) {
-    return this.parcels.find( parcels => parcels.userid == userid);
+    const parcel = this.parcels.find( parcels => parcels.userid == userid);
+    if(parcel){
+      return parcel;
+    }else{
+      return {'message': 'no parcel for this user'}
+    }
   }
 
   removeParcel (parcelId) {
@@ -44,7 +49,8 @@ export default class parcelOrder {
       pickupcode: order.pickupcode,
       destination: order.destination,
       destinationcode: order.destinationcode,
-      weight: order.weight
+      weight: order.weight,
+      status : 'pending'
     });
   }
   updateParcel (id, field, value = null){
@@ -57,9 +63,20 @@ export default class parcelOrder {
     parcel.destinationcode = field.destinationcode;
     return 'destination has been updated';
   }
+  cancelParcel (id){
+    const parcel = this.getSingleParcel (id);
+    if (typeof parcel === 'object'){
+      if (parcel.status === 'transit' && parcel.status === 'delivered'){
+        return `This parcel cannot be canceled, It status is ${parcel.status}`
+      }
+      parcel.status = 'canceled';
+      return 'This parcel has be canceled';
+    }
+    return 'parcel not found'
+  }
   orderExist (id) {
     try {
-      if(this.parcels.find( parcels => parcels.userid == id).length > 0 ){
+      if(this.parcels.find( parcels => parcels.userid == id)){
         return true;
       }
       return false;
@@ -68,3 +85,5 @@ export default class parcelOrder {
     }
   }
 }
+
+export default parcelOrder

@@ -1,9 +1,8 @@
 import express from'express';
 import bodyParser from 'body-parser';
-import parcelOrder from '../models/parcel.model';
+import parcels from '../models/users.model';
 
 const parcelRouter = express.Router();
-const parcels = new parcelOrder();
 
 // get all parcels.
 parcelRouter.get('/',  ( req, res ) => {
@@ -16,8 +15,8 @@ parcelRouter.get('/:parcelID', ( req, res ) => {
 })
 
 // cancel parcel
-parcelRouter.get('/:parcelID/cancel', ( req, res ) => {
-  res.json(parcels.removeParcel(req.params.parcelID))
+parcelRouter.put('/:parcelID/cancel', ( req, res ) => {
+  res.json(parcels.cancelParcel(req.params.parcelID))
 })
 
 // create parcel
@@ -35,5 +34,4 @@ parcelRouter.post('/update', ( req, res ) => {
   res.json(resp)
 })
 
-module.exports = parcels;
-module.exports = parcelRouter;
+module.exports = parcelRouter, parcels;
