@@ -1,17 +1,14 @@
 import {inArray, removeArray, generateID} from '../helpers/helper';
-import parcelOrder from './parcel.model'
-class UserDB extends parcelOrder{
+import ParcelOrder from './parcel'
+class UserDB extends ParcelOrder{
   constructor (parcel, users) {
     super(parcel)
     this.parcels = parcel;
     this.usersDatabase = users;
   }
-  changeUserDB (users) {
-    this.usersDatabase = users;
-  }
   getAllUsers () {
     if (this.usersDatabase.length === 0) {
-      return 'no user available in database';
+      return {'message' : 'no user available in database'};
     }
   return (this.usersDatabase);
   }
@@ -25,14 +22,14 @@ class UserDB extends parcelOrder{
     if(parcel){
       return parcel;
     }else{
-      return {'message': 'no parcel for this user'}
+      return {'message': 'no parcel for this user'};
     }
   }
 
   createUser (user) {
     let userid = generateID(999);
     if (this.userExist(userid)){
-      userid = userid * 2;
+      userid = (this.usersDatabase - 1) + (userid * 2);
     }
 
     this.usersDatabase.push ({
@@ -42,6 +39,8 @@ class UserDB extends parcelOrder{
       phone: user.phone,
       password: user.password
     });
+    this.setStatus (201);
+    return {'message' : 'new user added'}
   }
   userExist (id) {
     try {

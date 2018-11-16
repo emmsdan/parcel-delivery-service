@@ -1,11 +1,11 @@
 import express from'express';
 import bodyParser from 'body-parser';
 const userRouter = express.Router();
-import userDb from '../models/users.model'
+import userDb from '../models/users'
 
 // get user profile.
 userRouter.post('/create',  ( req, res ) => {
-  res.json (userDb.createUser(req.body));
+  res.json (userDb.createUser(req.body)).status(userDb.status());
 })
 
 // get user parcels

@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import userRouter from  './routes/users.route'
-import parcelRouter from  './routes/parcel.route'
-import errorRouter from  './routes/error.route'
+import userRouter from  './routes/users'
+import parcelRouter from  './routes/parcel'
+import errorRouter from  './routes/error'
 
 const app = express();
 
@@ -14,7 +14,8 @@ if (port == null || port == "") {
 }
 
 app.get('/', (req, res) => {
-  res.json('Hello World!')
+  res.json({'message': `Please use the proper API version to access the page`})
+  res.status(401)
 })
 
 app.use ('/api/v1/users', userRouter);
