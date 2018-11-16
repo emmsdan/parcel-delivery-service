@@ -24,6 +24,10 @@ app.use ('/api/v1/parcel', parcelRouter);
 // handles error pages like 404
 app.use ('*', errorRouter);
 
-app.listen(port, () => {
-  console.log(`App server is listening on port ${port}!`);
-})
+const server = app.listen(port, () => console.log(`App server is listening on port ${port}!`))
+
+process.on('exit', () => server.close())
+process.on('SIGTERM', () => server.close())
+process.on('uncaughtException', () => server.close())
+
+export default app;
