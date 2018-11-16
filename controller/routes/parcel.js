@@ -1,6 +1,6 @@
 import express from'express';
 import bodyParser from 'body-parser';
-import parcels from '../models/parcel.model';
+import parcels from '../models/users';
 
 const parcelRouter = express.Router();
 
@@ -33,5 +33,4 @@ parcelRouter.post('/update', ( req, res ) => {
   }
   res.json(resp)
 })
-
 module.exports = parcelRouter, parcels;
