@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.use ('/api/v1/users', userRouter);
-app.use ('/api/v1/parcel', parcelRouter);
+app.use ('/api/v1/parcels', parcelRouter);
 
 // handles error pages like 404
 app.use ('*', errorRouter);
