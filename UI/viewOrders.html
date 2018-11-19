@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html oncontextmenu="return false;" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Send-It - Parcel Delivery Service </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" description="Emmanuel Daniel">
+    <link href="https://unpkg.com/ionicons@4.4.7/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Philosopher" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/main.css" />
+  </head>
+  <body>
+    <header data-add-file="header.volt"></header>
+    <div id="map" role="application" aria-label="Google Maps of Delivery Post" class="map"></div>
+      <main class="w90p center"  oncontextmenu="return true;">
+
+
+      <div class="clear-x"></div>
+      <div class="boxes" data-view="app-view">
+
+        <div class="b-3-5 b-t-5">
+            <img src="assets/img/package.jpg" class="circle thumbnail" height="300">
+        </div>
+        <div class="b-6 b-t-6 center">
+          <h2> iphone and charger </h2>
+          <div class="clear-x"></div>
+          <p>
+            the parcel contains iPhone 8plus with a laptop charger belonging to HP 655
+          </p>
+
+          <p>081 831 352 63
+            <i class="icon xx-text">$50</i>
+            <span class="for x-text">for</span>
+            <i class="icon blue-text xx-text">5kg</i>
+          </p>
+          <h5> <span class="blue pad5 toUpperCase">Status</span>
+            <span class="red pad5 toUpperCase">pending</span>
+            <a class="btn-border x-text" href="#" disabled data-target="updateStatus"> Change Status </a>
+          </h5>
+
+          <div class="clear-x"></div>
+          <h6> Current Location:
+            <span class="red-text pad5 toUpperCase"> Aja market </span>
+            <a href="#" data-target="updateLocation">Change </a>
+          </h6>
+          <div class="clear-x"></div>
+          <hr/>
+            <div class="boxes">
+              <div class="b-5">
+                <p class="xx-text"> From</p>
+                <hr/>
+                <h6>Christina Sass</h6>
+                <p>
+                  No. 228, Ikeja junction, <br>
+                  Opp. Jakura Ind. <br>
+                  Lagos State. <br>
+                </p>
+                <p> <b>Phone: </b> 081 4546 7267</p>
+                <p> <b> Email: </b> ecom@gmail.com</p>
+              </div>
+              <div class="b-5">
+                  <p class="xx-text"> To</p>
+                  <hr/>
+                <h6>Jeremy Johnson</h6>
+                <p>
+                  No. 228, Ikeja junction, <br>
+                  Opp. Jakura Ind. <br>
+                  Lagos State. <br>
+                </p>
+                <p> <b>Phone: </b> 081 4546 7267</p>
+                <p> <b> Email: </b> ecom@gmail.com</p>
+                <br/>
+                <a class="btn-border" href="#" data-target="updateDest"> Update Destination </a>
+
+              </div>
+            </div>
+            <div class="clear-x"></div>
+            <div class="clear-x"></div>
+            <h6> Stipulated Distance:
+              <span class="red-text pad5 toUpperCase">23.94km </span>
+            </h6>
+            <h6> Duration:
+              <span class="red-text pad5 toUpperCase"> 1hour 35min 5sec </span>
+            </h6>
+        </div>
+      </div>
+    </main>
+    <div class="modal" id="updateDest">
+      <div class="modal-content w70p">
+        <h5> Update Destination</h5>
+        <div class="clear-xx"></div>
+        <form action="updateparcel" method="POST">
+
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>Destination Personel's Name</label>
+          </div>
+          <div class="group ">
+            <input type="text" required class="">
+            <span class="highlight"></span>
+            <label>Destination Code</label>
+          </div>
+          <div class="group ">
+            <textarea type="text" required class=""></textarea>
+            <span class="highlight"></span>
+            <label>Destination Address</label>
+          </div>
+        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Update Destination </button>
+        </form>
+      </div>
+    </div>
+    <div class="modal" id="updateLocation">
+      <div class="modal-content w70p">
+        <h5> Update Location</h5>
+        <div class="clear-xx"></div>
+        <form action="updateparcel" method="POST">
+
+          <div class="group ">
+            <textarea type="text" required class=""></textarea>
+            <span class="highlight"></span>
+            <label>Current Location</label>
+          </div>
+        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Change Location </button>
+        </form>
+      </div>
+    </div>
+    <div class="modal" id="updateStatus">
+      <div class="modal-content w70p">
+        <h5> Update Status</h5>
+        <div class="clear-xx"></div>
+        <form action="updateparcel" method="POST">
+
+          <div class="group ">
+            <select>
+              <option>Delivered</option>
+              <option>Transit</option>
+              <option>Canceled</option>
+            </select>
+          </div>
+        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Change Location </button>
+        </form>
+      </div>
+    </div>
+    <div class="toast">..</div>
+
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/api.js"></script>
+    <!-- Google Maps -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg46mssaV7VJ1N0H9nUrasFlX76IP4rgM&libraries=places&callback=initMap"></script>
+  </body>
+</html>
