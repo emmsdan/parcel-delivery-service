@@ -448,10 +448,10 @@ nav.side a.headerBtn  {
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url('../img/bg.jpg') ;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: calc(100vh - 70px);
+  min-height: 100vh;
   text-align: center;
 }
-.screen h2, .screen h3, .screen a.get-started{
+.screen h2, .screen h3, .screen h5, .screen a.get-started{
   position: relative !important;
   top: 20vh;
   font-size: 4rem;
@@ -462,6 +462,10 @@ nav.side a.headerBtn  {
 .screen h3{
   font-size: 3rem;
   font-family: 'Courier New', Courier, monospace;
+}
+.screen h5{
+  font-size:2rem;
+  top: 45vh;
 }
 .screen a.get-started {
   top: 30vh;
