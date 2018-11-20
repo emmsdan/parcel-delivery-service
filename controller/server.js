@@ -4,8 +4,9 @@ import db from './db';
 
 import userRouter from  './routes/users'
 import parcelRouter from  './routes/parcel'
-import errorRouter from  './routes/error'
 
+import v2Routes from './routes/v2Routes'
+import errorRouter from  './routes/error'
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,12 +20,34 @@ app.get('/', (req, res) => {
   res.status(401)
 })
 
+/**
+ * API version 1
+ * can provided access to user and parcel routes
+ * no authentication.
+ * and data does not persist.
+ */
 app.use ('/api/v1/users', userRouter);
 app.use ('/api/v1/parcels', parcelRouter);
 
-// handles error pages like 404
+/**
+ * API version 2
+ * provided access to user, parcel,
+ * authentication and admin.
+ * data are stored in postgreSQL Database.
+ * using a single module called v2Routes
+ * to handle all version 2 routing
+ */
+app.use('/api/v2/', v2Routes);
+/**
+ * handles error pages like 404, 500 etc
+ * handled just common cases
+ */
 app.use ('*', errorRouter);
 
+/**
+ * start listen to server
+ * Create need tables on server start
+ */
 const server = app.listen(port, () => {
 
   db.none(`CREATE TABLE  IF NOT EXISTS users (
