@@ -4,7 +4,7 @@ import { inArray, generateID } from '../helpers/helper';
  * Handles Parcel Orders
  * @author EmmsDan <ecomje@gmail.com>
  */
-class ParcelOrder {
+class ParcelOrderController {
   /**
    *  Assigns data to the program
    * @param {array} parcels
@@ -157,4 +157,4 @@ class ParcelOrder {
     }
   }
 }
-export default ParcelOrder;
+export default ParcelOrderController;
