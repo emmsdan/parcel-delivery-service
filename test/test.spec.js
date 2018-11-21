@@ -11,15 +11,16 @@ describe ( 'Parcel API Routes', () => {
       done();
   });
 
-  describe('POST /api/v1/parcel', () => {
+  describe('POST /api/v1/parcels', () => {
     it('should create parcels order successfully', (done) => {
-      request.post('/api/v1/parcel')
+      request.post('/api/v1/parcels')
       .type ('form')
       .send ({
         userId: 3244,
         content : 'iphone 6+ with hp 665 notepad',
         weight : 23,
         pickup : 'Ikeja, Lagos Nigeria',
+        pickupcode : 21321,
         destination : 'Ojota, Lagos Nigeria',
         destinationcode: 123
       })
@@ -31,10 +32,10 @@ describe ( 'Parcel API Routes', () => {
       });
     });
   });
-  
-  describe('GET /api/v1/parcel', () => {
+
+  describe('GET /api/v1/parcels', () => {
     it('should return list of parcels as an array ', (done) => {
-      request.get('/api/v1/parcel')
+      request.get('/api/v1/parcels')
       .expect(200)
       .end( (err, res) => {
         expect(res.body).to.a('array')
@@ -46,7 +47,7 @@ describe ( 'Parcel API Routes', () => {
 
   describe('GET /api/v1/parcel/:parcelID', () => {
     it('should get single parcel order', (done) => {
-      request.get ('/api/v1/parcel')
+      request.get ('/api/v1/parcels')
       .expect(200)
       .end ( (err, res ) => {
         request.get(`/api/v1/parcel/${res.body[0].id}`)
