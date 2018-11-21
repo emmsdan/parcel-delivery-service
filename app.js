@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import userRouter from  './routes/users'
-import parcelRouter from  './routes/parcel'
-import errorRouter from  './routes/error'
+import userRouter from  './server/routes/users'
+import parcelRouter from  './server/routes/parcel'
+import errorRouter from  './server/routes/error'
 
 const app = express();
 

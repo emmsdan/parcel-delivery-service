@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 import chai from 'chai'
-import app from "../controller/server";
+import app from "../app";
 
 global.app = app;
 global.expect = chai.expect;
@@ -31,7 +31,7 @@ describe ( 'Parcel API Routes', () => {
       });
     });
   });
-  
+
   describe('GET /api/v1/parcel', () => {
     it('should return list of parcels as an array ', (done) => {
       request.get('/api/v1/parcel')
