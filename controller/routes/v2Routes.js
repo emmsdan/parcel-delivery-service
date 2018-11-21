@@ -149,3 +149,4 @@ routers.patch('/parcels/:parcelId/currentlocation',  ( req, res ) => {
   res.json (v2Parcel.response()).status(v2Parcel.status());
 })
 
+module.exports = routers;
