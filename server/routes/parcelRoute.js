@@ -1,6 +1,6 @@
 import express from'express';
 import bodyParser from 'body-parser';
-import parcels from '../models/users';
+import parcels from '../controller/users';
 
 const parcelRouter = express.Router();
 
