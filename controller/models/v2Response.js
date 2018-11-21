@@ -28,6 +28,7 @@ class v2Response {
    }
    setResponse (resp, type = null){
      this[response] = ((type === null && typeof resp !== 'string') ? {'status': this.status(), 'data': [resp]} : {'status': this.status(), 'error': resp});
+     return;
    }
    response() {
      return this[response];

@@ -19,8 +19,7 @@ routers.get('/',  ( req, res ) => {
  * @access :POST /api/v2/auth/signup
  */
 routers.post('/auth/signup',  ( req, res ) => {
-  v2User.registerUser(req.body);
-  res.json (v2User.response()).status(v2User.status());
+  v2User.registerUser(req.body, res);
 })
 
 /**
@@ -28,8 +27,7 @@ routers.post('/auth/signup',  ( req, res ) => {
  * @access :POST /api/v2/auth/login
  */
 routers.post('/auth/login',  ( req, res ) => {
-  v2User.loginUser(req.body);
-  res.json (v2User.response()).status(v2User.status());
+  v2User.loginUser(req.body, res);
 })
 
 /** parcel processing */

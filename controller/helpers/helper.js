@@ -12,3 +12,4 @@ export const inArray = (array, id, value) => {
 export const generateID = (max) => {
   return Math.floor(Math.random() * max  + 100);
 }
+

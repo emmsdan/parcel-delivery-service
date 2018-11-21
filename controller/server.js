@@ -56,8 +56,9 @@ const server = app.listen(port, () => {
     username VARCHAR,
     fullname VARCHAR,
     phone Numeric,
-    email INTEGER,
+    email VARCHAR,
     sex VARCHAR,
+    password VARCHAR,
     registered TIMESTAMP,
     isAdmin Boolean
   );
