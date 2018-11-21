@@ -1,6 +1,6 @@
 import {inArray, removeArray, generateID} from '../helpers/helper';
 import ParcelOrder from './parcel'
-class UserDB extends ParcelOrder{
+class UserController extends ParcelOrder{
   constructor (parcel, users) {
     super(parcel)
     this.parcels = parcel;
