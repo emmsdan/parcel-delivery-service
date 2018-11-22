@@ -27,7 +27,7 @@ class ResponseController {
    * @param {number} code
    */
   setStatus(code) {
-    if (validator.isNumeric(code)) {
+    if (validator.isNumeric(code.toString())) {
       this[statusCode] = code;
     }
   }
