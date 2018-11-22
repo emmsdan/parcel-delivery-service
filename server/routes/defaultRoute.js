@@ -136,10 +136,15 @@ defaultRouters.patch('/parcels/:parcelId/cancel',  (req, res) => {
  * API: Change the location of a specific parcel delivery order
  * @access :PUT /api/v1/parcels/[:parcelId]/destination
  */
-defaultRouters.put('/parcels/:parcelId/destination',  (req, res) => {
+defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || (token.role !== 'user' || token.userId === undefined)) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeDestination({
     parcelId: req.params.parcelId,
-    userId: UserController.userId() || null,
+    userId: token.userId,
     data: req.body
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
