@@ -11,12 +11,12 @@ class EmailSenderController {
   static sendMail(mailOptions) {
     // SMTP service account for sending mail.
     const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false, // true for 465, false for other ports
+      host: 'smtp.gmail.com',
+      port: 25,
+      secure: false,
       auth: {
-        user: 'account.user', // generated ethereal user
-        pass: 'account.pass' // generated ethereal password
+        user: 'ecomje@gmail.com',
+        pass: '08036459847emmsdance123'
       }
     });
     mailOptions.from = '"SendIt.io" <ecomje@gmail.com>';
