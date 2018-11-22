@@ -2,7 +2,7 @@ import validator from 'validator';
 
 const response = Symbol('response');
 const statusCode = Symbol('statusCode');
-
+const xToken = Symbol ('xToken');
 /**
  * v2Response.js:
  * Handles simple response.
@@ -23,8 +23,16 @@ class ResponseController {
   }
 
   /**
+   * set the response token header
+   * @param {number} token : set response status
+   */
+  setheader(token) {
+      this[xToken] = token;
+  }
+
+  /**
    * set the response status
-   * @param {number} code
+   * @param {number} code : set response status
    */
   setStatus(code) {
     if (validator.isNumeric(code.toString())) {
@@ -39,6 +47,14 @@ class ResponseController {
    */
   setResponse(resp, type = null) {
     this[response] = ((type === null && typeof resp !== 'string') ? { status: this.status(), data: [resp] } : { status: this.status(), error: resp });
+  }
+
+  /**
+   * get token header
+   * @returns {string};
+   */
+  header() {
+    return this[xToken];
   }
 
   /**

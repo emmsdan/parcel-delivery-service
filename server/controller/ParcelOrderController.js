@@ -1,32 +1,26 @@
-import { inArray, generateID } from '../helpers/helper';
+import validator from 'validator';
+import moment from 'moment';
+import bcrypt from 'bcrypt';
 
+import { inArray, generateID, isEmpty } from '../helpers/helper';
+import ResponseController from './ResponseController';
+import DatabaseManager from '../db_manager/DatabaseManager';
+import NotificationController from './NotificationController';
+
+const date = moment();
+const validateNewOrder = Symbol('validateNewOrder');
 /**
  * Handles Parcel Orders
  * @author EmmsDan <ecomje@gmail.com>
  */
-class ParcelOrderController {
+class ParcelOrderController extends ResponseController {
   /**
    *  Assigns data to the program
    * @param {array} parcels
    */
   constructor(parcels) {
+    super();
     this.parcels = parcels;
-  }
-
-  /**
-   *  set response status
-   * @param {number} statusCode : set response status
-   */
-  setStatus(statusCode) {
-    this.statusCode = statusCode;
-  }
-
-  /**
-   * Get response status
-   * @returns {number}
-   */
-  status() {
-    return this.statusCode;
   }
 
   /**
@@ -36,7 +30,7 @@ class ParcelOrderController {
   getParcels() {
     if (this.parcels.length === 0) {
       this.setStatus(404);
-      return { message: 'Parcel not available' };
+      return 'Parcel not available';
     }
     this.setStatus(200);
     return (this.parcels);
@@ -63,47 +57,57 @@ class ParcelOrderController {
       return parcel;
     }
     this.setStatus(404);
-    return { message: 'Parcel not available for This User' };
+    return 'Parcel not available for This User';
   }
 
 
   /**
    *  Create Parcel delivery order
-   * @param {object} order
+   * @param {object} data
    * @returns {object}
    */
-  createOrder(order) {
-    let orderId = generateID(999);
-    if (this.orderExist(orderId)) {
-      orderId = (this.parcels - 1) + (orderId * 2);
+  createOrders(data) {
+    const order = data.data;
+    if (data.userId === undefined) {
+      this.setResponse('Please Login to continue');
+      this.setStatus(200);
+      return false;
     }
-
-    if (order.userId === undefined) {
-      return { message: 'UserId not specified: Order Must belong to a User' };
+    if (isEmpty(order)) {
+      this.setResponse('You need to supply necessary Credentials');
+      this.setStatus(200);
+      return false;
     }
-    if (order.content === undefined || order.pickup === undefined) {
-      return { message: 'Order Details can\'t be empty' };
+    const orderId = (generateID(222).toString() + date.valueOf().toString());
+    if (!this[validateNewOrder](order)) {
+      return false;
     }
-    if (order.destination === undefined || order.destinationcode === undefined) {
-      return { message: 'Order Details can\'t be empty' };
-    }
-    if (order.pickupcode === undefined || order.weight === undefined) {
-      return { message: 'Order Details can\'t be empty' };
-    }
-
-    this.parcels.push({
-      userid: order.userId,
-      id: orderId,
-      content: order.content,
-      pickup: order.pickup,
-      pickupcode: order.pickupcode,
-      destination: order.destination,
-      destinationcode: order.destinationcode,
-      weight: order.weight,
-      status: 'pending'
-    });
-    this.setStatus(201);
-    return { message: 'new order created' };
+    return DatabaseManager.query(
+      'INSERT INTO Parcel (orderId, userId, pName, pDesc, pPix, weight, status, sentOn, pickUpName, pickUpAddress, destName, destAddress) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
+      [
+        orderId,
+        data.userId,
+        order.contentName,
+        order.contentDesc,
+        order.contentImage,
+        order.weight,
+        'pending',
+        moment(),
+        order.pickupName,
+        `${order.pickUpAddress}:==:${order.pickupCode}`,
+        order.destinationName,
+        `${order.destinationAddress}:==:${order.destinationcode}`
+      ])
+      .then((response) => {
+        this.setResponse({ orderId, success: 'Parcel added successfully' });
+        this.setStatus(200);
+        return false;
+      })
+      .catch((error) => {
+        this.setResponse(error.message);
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
@@ -116,12 +120,12 @@ class ParcelOrderController {
   updateParcel(id, field, value = null) {
     if (value !== null) {
       this.getSingleParcel(id).field = value;
-      return { message: 'status has been updated' };
+      return 'status has been updated' ;
     }
     const parcel = this.getSingleParcel(id);
     parcel.destination = field.destination;
     parcel.destinationcode = field.destinationcode;
-    return { message: 'destination has been updated' };
+    return 'destination has been updated';
   }
 
   /**
@@ -133,12 +137,12 @@ class ParcelOrderController {
     const parcel = this.getSingleParcel(id);
     if (typeof parcel === 'object') {
       if (parcel.status === 'transit' && parcel.status === 'delivered') {
-        return { message: `This parcel cannot be canceled, Its status is ${parcel.status}` };
+        return `This parcel cannot be canceled, Its status is ${parcel.status}` ;
       }
       parcel.status = 'canceled';
-      return { message: 'This parcel has be canceled' };
+      return 'This parcel has be canceled';
     }
-    return { message: 'parcel not found' };
+    return 'parcel not found';
   }
 
   /**
@@ -156,5 +160,60 @@ class ParcelOrderController {
       return false;
     }
   }
+
+  /**
+   * @param {object} order
+   * @returns {boolean}
+   */
+  [validateNewOrder](order) {
+    if (order.contentName === undefined) {
+      this.setResponse('Please enter Content Title/Name');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.contentDesc === undefined) {
+      order.contentDesc = '';
+    }
+    if (order.contentImage === undefined) {
+      order.contentImage = '';
+    }
+    if (order.pickupName === undefined) {
+      this.setResponse('Please Enter the Name of personel to pickup Item From');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.pickUpAddress === undefined) {
+      this.setResponse('Please You need to enter Pickup Location');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.pickupCode === undefined) {
+      this.setResponse('Please Enter the Pickup Area Post Code');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isNumeric((order.weight || 'n86f$%^'))) {
+      this.setResponse('Please Enter valid weight');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.destinationName === undefined) {
+      this.setResponse('Please Enter the Name of personel to deliver to');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.destinationAddress === undefined) {
+      this.setResponse('Please Enter the Delivery Address');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.destinationCode === undefined) {
+      this.setResponse('Please Enter the Delivery Area Post Code');
+      this.setStatus(200);
+      return false;
+    }
+    return true;
+  }
 }
-export default ParcelOrderController;
+const parcelController = new ParcelOrderController();
+export default parcelController;

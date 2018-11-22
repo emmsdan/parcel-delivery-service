@@ -1,6 +1,6 @@
-import moment from 'moment';
 import jwt from 'jsonwebtoken';
 
+process.env.AUTH_TOKEN_SECRET = '\xf8%\xa8\xf2INz\xcc:\x171\xeei\x82\xce\x81Y\xc2HJ\xe5\x01\xf3$';
 /**
  * AuthTokenController: generateToken for User Authentication
  */
@@ -8,32 +8,19 @@ class AuthTokenController {
   /**
    * generateToken
    * @param {string/object} user
-   * @returns {Promise}
+   * @returns {string}
    */
   static generateToken(user) {
-    const playload = {
-      exp: moment().add(14, 'days').unix(),
-      iat: moment().unix(),
-      sub: user
-    };
-    return jwt.sign(playload, process.env.AUTH_TOKEN_SECRET);
+    return jwt.sign(user, process.env.AUTH_TOKEN_SECRET);
   }
 
   /**
    * decode generated Token
    * @param {string} token
-   * @param {function} callback
+   * @returns {string}
    */
-  static decodeToken(token, callback) {
-    const payload = jwt.decode(token);
-    const now = moment().unix();
-    // check if the token has expired
-    if (now > payload.exp) {
-      callback('Token has expired.');
-    } else {
-      callback(null, payload);
-    }
+  static decodeToken(token) {
+    return jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
   }
 }
-
 export default AuthTokenController;
