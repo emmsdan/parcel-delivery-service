@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
 import DatabaseManager from '../db_manager/DatabaseManager';
+import NotificationController from '../controller/NotificationController';
 
 const validateRegister = Symbol('validateRegister');
 /**
@@ -74,6 +75,13 @@ class UserController extends ResponseController {
         if (response.rowCount > 0) {
           this.setResponse({ success: 'Account created Successfully' });
           this.setStatus(200);
+          /*
+          NotificationController.setNotification(`Hi, ${user.name} \r\n Welcome to SendIt. We are Glad to have you here.`, {
+            userId: userID,
+            subject: 'New Account Created with SendIt.',
+            to: user.email
+          });
+          */
         } else {
           this.setResponse('could not create an account, server error');
           this.setStatus(200);
