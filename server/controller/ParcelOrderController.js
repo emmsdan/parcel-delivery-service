@@ -50,14 +50,28 @@ class ParcelOrderController extends ResponseController {
    * @param {string/number} userid
    * @returns {array/object}
    */
-  getUserParcels(userid) {
-    const parcel = this.parcels.find(parcels => parcels.userid === userid);
-    if (parcel) {
+  getUsersOrder(userid) {
+    if (!validator.isAlphanumeric(userid)) {
+      this.setResponse('Invalid userId specified');
       this.setStatus(200);
-      return parcel;
+      return false;
     }
-    this.setStatus(404);
-    return 'Parcel not available for This User';
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE userid=$1', [userid])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel not available for This User');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        return false;
+      });
   }
 
 
