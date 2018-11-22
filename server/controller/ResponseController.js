@@ -18,7 +18,7 @@ class ResponseController {
     if (new.target === ResponseController) {
       throw new Error('Class Can\'t can be Instantiated');
     }
-    this[response] = [];
+    this[response] = { status: this.status(), error: 'Please Check, your Connection' };
     this[statusCode] = 200;
   }
 
@@ -27,7 +27,7 @@ class ResponseController {
    * @param {number} code
    */
   setStatus(code) {
-    if (validator.isNumeric(code)) {
+    if (validator.isNumeric(code.toString())) {
       this[statusCode] = code;
     }
   }

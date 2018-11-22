@@ -20,7 +20,7 @@ class NotificationController {
   static setNotification(message, userInfo) {
     const mailOption = {
       to: userInfo.to,
-      subject: userInfo.subject,
+      subject: `${userInfo.subject}  ✔`,
       text: message, // plain text body
       html: `<h6>${message}</h6>` // html body
     };
