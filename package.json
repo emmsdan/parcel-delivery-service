@@ -2,7 +2,7 @@
   "name": "parcel-delivery-service",
   "version": "1.0.0",
   "description": "a courier service that helps users deliver parcels to different destinations. SendIT",
-  "main": "controller/server.js",
+  "main": "app.js",
   "scripts": {
     "build": "babel ./ -d build",
     "start": "babel-node app.js",
