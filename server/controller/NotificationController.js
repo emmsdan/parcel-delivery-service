@@ -17,15 +17,24 @@ class NotificationController {
    * @param {string} message
    * @param {object} userInfo
    */
-  static addNotification(message, userInfo) {
+  static setNotification(message, userInfo) {
     const mailOption = {
       to: userInfo.to,
       subject: userInfo.subject,
       text: message, // plain text body
       html: `<h6>${message}</h6>` // html body
     };
-    DatabaseManager.newNotification({ userId: userInfo.userId, notify: message });
+    DatabaseManager.setNotification({ userId: userInfo.userId, notify: message });
     EmailSenderController.sendMail(mailOption);
+  }
+
+  /**
+   *
+   * @param {string} userId
+   * @returns {array}
+   */
+  static getNotification(userId) {
+    return DatabaseManager.getNotification(userId);
   }
 }
 
