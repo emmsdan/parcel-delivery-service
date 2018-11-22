@@ -53,8 +53,12 @@ defaultRouters.post('/auth/login',  (req, res) => {
  * @access :GET /api/v1/users/[:userId]/parcels
  */
 defaultRouters.get('/users/:userId/parcels',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || (token.role === 'user' && token.userId !== req.params.userId)) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.getUsersOrder(req.params.userId);
-  res.setHeader('x-token', ParcelOrderController.header());
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
 
@@ -86,7 +90,7 @@ defaultRouters.post('/parcels', (req, res) => {
     res.json({ error: 'Unauthoerized' }).status(401);
     return;
   }
-  
+
   ParcelOrderController.createOrders({
     data: req.body,
     userId: token.userId
