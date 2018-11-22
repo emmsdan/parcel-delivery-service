@@ -6,7 +6,7 @@ import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
 import DatabaseManager from '../db_manager/DatabaseManager';
 import NotificationController from './NotificationController';
-
+import AuthTokenController from './AuthTokenController'
 const validateRegister = Symbol('validateRegister');
 const validateLogin = Symbol('validateLogin');
 /**
@@ -67,6 +67,11 @@ class UserController extends ResponseController {
           if (bcrypt.compareSync(user.pass, response.rows[0].password)) {
             this.setResponse({ success: 'Login successful' });
             this.setStatus(200);
+            this.setheader(AuthTokenController.generateToken({
+              userId: response.rows[0].userid,
+              mail: response.rows[0].email,
+              role: response.rows[0].isadmin
+            }));
             return true;
           }
           this.setResponse('Password is not valid');
@@ -114,6 +119,11 @@ class UserController extends ResponseController {
         if (response.rowCount > 0) {
           this.setResponse({ success: 'Account created Successfully' });
           this.setStatus(200);
+          this.setheader(AuthTokenController.generateToken({
+            userId: userID,
+            mail: user.email,
+            role: 'user'
+          }));
           /*
           NotificationController.setNotification(`Hi, ${user.name} \r\n
            Welcome to SendIt. We are Glad to have you here.`, {
