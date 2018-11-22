@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 
 import UserController from '../controller/UserController';
 import ParcelOrderController from '../controller/ParcelOrderController';
@@ -8,14 +9,18 @@ const defaultRouters = express.Router();
 
 /**
  * API Documentation
+ * in dev mode start server with "nodemon --exec babel-node app.js"
  */
+
+defaultRouters.use(bodyParser.urlencoded({ extended: false }));
+
 defaultRouters.get('/', (req, res) => {
   res.send('<h1> Welcome to SendIT Official Documentation, website');
 });
 
 /**
  * API: create new user account
- * @access :POST /api/v2/auth/signup
+ * @access :POST /api/v1/auth/signup
  */
 defaultRouters.post('/auth/signup', (req, res) => {
   UserController.registerUser(req.body);
@@ -24,7 +29,7 @@ defaultRouters.post('/auth/signup', (req, res) => {
 
 /**
  * API: login user to account
- * @access :POST /api/v2/auth/login
+ * @access :POST /api/v1/auth/login
  */
 defaultRouters.post('/auth/login', (req, res) => {
   UserController.loginUser(req.body);
@@ -35,7 +40,7 @@ defaultRouters.post('/auth/login', (req, res) => {
 
 /**
  * API: Access parcel delivery order by a specific user
- * @access :GET /api/v2/users/[:userId]/parcels
+ * @access :GET /api/v1/users/[:userId]/parcels
  */
 defaultRouters.get('/users/:userId/parcels', (req, res) => {
   ParcelOrderController.getUsersOrder(req.params.userId);
@@ -44,7 +49,7 @@ defaultRouters.get('/users/:userId/parcels', (req, res) => {
 
 /**
  * API: Access to a specific delivery order
- * @access :GET /api/v2/parcels/[:parcelId]
+ * @access :GET /api/v1/parcels/[:parcelId]
  */
 defaultRouters.get('/parcels/:parcelId', (req, res) => {
   ParcelOrderController.getSpecificOrder(req.params.parcelId);
@@ -53,7 +58,7 @@ defaultRouters.get('/parcels/:parcelId', (req, res) => {
 
 /**
  * API: Access all parcel delivery orders
- * @access :GET /api/v2/parcels
+ * @access :GET /api/v1/parcels
  */
 defaultRouters.get('/parcels', (req, res) => {
   ParcelOrderController.orders();
@@ -62,7 +67,7 @@ defaultRouters.get('/parcels', (req, res) => {
 
 /**
  * API: Create a parcel delivery order.
- * @access :POST /api/v2/parcels
+ * @access :POST /api/v1/parcels
  */
 defaultRouters.post('/parcels', (req, res) => {
   ParcelOrderController.createOrders({
@@ -74,7 +79,7 @@ defaultRouters.post('/parcels', (req, res) => {
 
 /**
  * API: Cancel the specific parcel delivery order
- * @access :PUT /api/v2/parcels/[:parcelId]/cancel
+ * @access :PUT /api/v1/parcels/[:parcelId]/cancel
  */
 defaultRouters.put('/parcels/:parcelId/cancel', (req, res) => {
   ParcelOrderController.cancelOrders({
@@ -86,7 +91,7 @@ defaultRouters.put('/parcels/:parcelId/cancel', (req, res) => {
 
 /**
  * API: Cancel the specific parcel delivery order
- * @access :PATCH /api/v2/parcels/[:parcelId]/cancel
+ * @access :PATCH /api/v1/parcels/[:parcelId]/cancel
  */
 defaultRouters.patch('/parcels/:parcelId/cancel', (req, res) => {
   ParcelOrderController.cancelOrders({
@@ -98,7 +103,7 @@ defaultRouters.patch('/parcels/:parcelId/cancel', (req, res) => {
 
 /**
  * API: Change the location of a specific parcel delivery order
- * @access :PUT /api/v2/parcels/[:parcelId]/destination
+ * @access :PUT /api/v1/parcels/[:parcelId]/destination
  */
 defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
   ParcelOrderController.changeDestination({
@@ -111,7 +116,7 @@ defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
 
 /**
  * API: Change the status of a specific parcel delivery order
- * @access :PUT /api/v2/parcels/[:parcelId]/status
+ * @access :PUT /api/v1/parcels/[:parcelId]/status
  */
 defaultRouters.put('/parcels/:parcelId/status', (req, res) => {
   ParcelOrderController.changeStatus({
@@ -124,7 +129,7 @@ defaultRouters.put('/parcels/:parcelId/status', (req, res) => {
 
 /**
  * API: Change the present location of a specific parcel delivery order
- * @access :PUT /api/v2/parcels/[:parcelId]/presentLocation
+ * @access :PUT /api/v1/parcels/[:parcelId]/presentLocation
  */
 defaultRouters.put('/parcels/:parcelId/presentLocation', (req, res) => {
   ParcelOrderController.changeLocation({
@@ -137,7 +142,7 @@ defaultRouters.put('/parcels/:parcelId/presentLocation', (req, res) => {
 
 /**
  * API: Change the present location of a specific parcel delivery order
- * @access :PATCH /api/v2/parcels/[:parcelId]/currentlocation
+ * @access :PATCH /api/v1/parcels/[:parcelId]/currentlocation
  */
 defaultRouters.patch('/parcels/:parcelId/currentlocation', (req, res) => {
   ParcelOrderController.changeLocation({
