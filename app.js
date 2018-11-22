@@ -50,6 +50,7 @@ const server = app.listen(port, () => {
     weight Numeric,
     weightmetric VARCHAR,
     status VARCHAR,
+    cLocation VARCHAR,
     sentOn timestamp,
     deliveredOn timestamp,
     pickUpName VARCHAR,

@@ -27,13 +27,23 @@ class ParcelOrderController extends ResponseController {
    * Get access to all the Parcels in DB
    * @returns {object}
    */
-  getParcels() {
-    if (this.parcels.length === 0) {
-      this.setStatus(404);
-      return 'Parcel not available';
-    }
-    this.setStatus(200);
-    return (this.parcels);
+  getOrders() {
+    return DatabaseManager.query('SELECT * FROM PARCEL')
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
@@ -41,8 +51,29 @@ class ParcelOrderController extends ResponseController {
    * @param {number} id
    * @returns {array}
    */
-  getSingleParcel(id) {
-    return inArray(this.parcels, 'id', id);
+  getSpecificOrder(id) {
+    if (!validator.isAlpha(id)) {
+      this.setResponse('Invalid parcel ID specified');
+      this.setStatus(200);
+      return false;
+    }
+
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [id])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
@@ -123,6 +154,62 @@ class ParcelOrderController extends ResponseController {
         return false;
       });
   }
+
+  /**
+   * change parcel status
+   * @param {object} ids : {parcelId, userId}
+   * @returns {object}
+   */
+  changeLocation(ids) {
+    if (ids.data === undefined) {
+      this.setResponse('location should be specified');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isAlphanumeric(ids.data)) {
+      this.setResponse('location can only contain AlphaNumeric');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isNumeric(ids.parcelId)) {
+      this.setResponse('Invalid parcel Id specified');
+      this.setStatus(200);
+      return false;
+    }
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          if (response.rows[0].status !== 'delivered') {
+            return DatabaseManager.query('UPDATE PARCEL SET cLocation=$1 WHERE orderid=$2', [
+              ids.data,
+              ids.parcelId
+            ])
+              .then(() => {
+                this.setResponse({ success: 'Parcel Current Location Updated' });
+                this.setStatus(200);
+                return true;
+              })
+              .catch((error) => {
+                this.setResponse(error.message);
+                this.setStatus(200);
+                return true;
+              });
+          }
+          this.setResponse('This Parcel can\'t be updated');
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
+  }
+
 
   /**
    * updated parcel status or destination
@@ -253,20 +340,80 @@ class ParcelOrderController extends ResponseController {
       });
   }
 
+
   /**
-   *  Checks if parcel order exist
-   * @param {number} id : parcel id
-   * @returns {boolean}
+   * change parcel status
+   * @param {object} ids : {parcelId, userId}
+   * @returns {object}
    */
-  orderExist(id) {
-    try {
-      if (this.parcels.find(parcels => parcels.userid === id)) {
-        return true;
-      }
-      return false;
-    } catch (err) {
+  changeStatus(ids) {
+    if (ids.data === undefined) {
+      this.setResponse('New Status type should be specified');
+      this.setStatus(200);
       return false;
     }
+    if (!validator.isAlpha(ids.data) || ids.data === 'canceled') {
+      this.setResponse('Invalid status type specified');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isNumeric(ids.parcelId)) {
+      this.setResponse('Invalid parcel Id specified');
+      this.setStatus(200);
+      return false;
+    }
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          if (response.rows[0].status !== 'delivered') {
+            return DatabaseManager.query('UPDATE PARCEL SET status=$1 WHERE orderid=$2', [
+              ids.data,
+              ids.parcelId
+            ])
+              .then(() => {
+                this.setResponse({ success: 'Parcel Status Updated' });
+                this.setStatus(200);
+                return true;
+              })
+              .catch((error) => {
+                this.setResponse(error);
+                this.setStatus(200);
+                return true;
+              });
+          }
+          this.setResponse('This Parcel can\'t be updated');
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
+  }
+
+  /**
+   * reset database
+   * @returns {null}
+   */
+  resetDB() {
+    return DatabaseManager.query(`DROP TABLE IF EXISTS users, parcel; CREATE TABLE  IF NOT EXISTS users (id SERIAL PRIMARY KEY, userId VARCHAR, username VARCHAR, fullname VARCHAR, phone Numeric, email VARCHAR  (60) UNIQUE, sex VARCHAR, password VARCHAR,registered TIMESTAMP, isAdmin Varchar );
+    CREATE TABLE  IF NOT EXISTS parcel (id SERIAL PRIMARY KEY,orderId VARCHAR, userId VARCHAR, pName VARCHAR, pDesc VARCHAR, pPix Varchar, weight Numeric, weightmetric VARCHAR, status VARCHAR, cLocation VARCHAR, sentOn timestamp, deliveredOn timestamp, pickUpName VARCHAR, pickUpAddress TEXT, destName VARCHAR, destAddress TEXT);
+    INSERT INTO USERS (userid, username, fullname, email, sex, password, isadmin) VALUES ('eadmin123', 'emmsdan', 'emmanuel daniel', 'ecomje@gmal.com', 'male', '$2b$10$4qzMEL9oUbH54dRsuMYNs.S9c9Lsd1KctV0/0M2Cm00MPcfGhi10u', 'admin')`)
+      .then((resp) => {
+        this.setResponse(resp);
+        this.setStatus(200);
+        return false;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
@@ -323,5 +470,6 @@ class ParcelOrderController extends ResponseController {
     return true;
   }
 }
+
 const parcelController = new ParcelOrderController();
 export default parcelController;
