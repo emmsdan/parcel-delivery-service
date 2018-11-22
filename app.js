@@ -42,6 +42,7 @@ const server = app.listen(port, () => {
   );
   CREATE TABLE  IF NOT EXISTS parcel (
     id SERIAL PRIMARY KEY,
+    orderId VARCHAR,
     userId VARCHAR,
     pName VARCHAR,
     pDesc VARCHAR,
