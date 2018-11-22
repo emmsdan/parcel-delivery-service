@@ -1,4 +1,5 @@
 import { Client } from 'pg';
+import moment from 'moment';
 
 const dbURL = {
   user: 'postgres',
@@ -38,6 +39,41 @@ class DatabaseManager {
     client.connect();
     return client;
   }
+
+  /**
+   *  add notification to db
+   * @param {object} message
+   * @param {string} dbUrl (optional)
+   */
+  static setNotification(message, dbUrl = dbURL) {
+    const client = new Client(dbUrl);
+    client.connect();
+    client.query('INSERT INTO NOTIFY (userId, message, dated) VALUES ($1, $2, $3)', [
+      message.userId,
+      message.notify,
+      moment().unix()
+    ], (error, resp) => {
+      if (error) throw error;
+      console.log(resp);
+      client.end();
+    });
+  }
+
+  /**
+   *  get notification from db
+   * @param {string} userId
+   * @param {string} dbUrl (optional)
+   * @returns {array}
+   */
+  static getNotification(userId, dbUrl = dbURL) {
+    const client = new Client(dbUrl);
+    client.connect();
+    client.query('SELECT * FROM NOTIFY WHERE userId = $1', [userId], (error, resp) => {
+      if (error) return error;
+      client.end();
+      return resp;
+    });
+  }
 }
 
-module.exports = DatabaseManager;
+export default DatabaseManager;
