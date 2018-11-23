@@ -1,6 +1,7 @@
 import validator from 'validator';
 import moment from 'moment';
 import bcrypt from 'bcrypt';
+import { Client } from 'pg';
 
 import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
@@ -274,9 +275,21 @@ class ParcelOrderController extends ResponseController {
    * @returns {null}
    */
   resetDB() {
-    DatabaseManager.query(`DROP TABLE IF EXISTS users, parcel; CREATE TABLE  IF NOT EXISTS users (id SERIAL PRIMARY KEY, userId VARCHAR, username VARCHAR, fullname VARCHAR, phone Numeric, email VARCHAR  (60) UNIQUE, sex VARCHAR, password VARCHAR,registered TIMESTAMP, isAdmin Varchar );
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query(`DROP TABLE IF EXISTS users, parcel; CREATE TABLE  IF NOT EXISTS users (id SERIAL PRIMARY KEY, userId VARCHAR, username VARCHAR, fullname VARCHAR, phone Numeric, email VARCHAR  (60) UNIQUE, sex VARCHAR, password VARCHAR,registered TIMESTAMP, isAdmin Varchar );
     CREATE TABLE  IF NOT EXISTS parcel (id SERIAL PRIMARY KEY,orderId VARCHAR, userId VARCHAR, pName VARCHAR, pDesc VARCHAR, pPix Varchar, weight Numeric, weightmetric VARCHAR, status VARCHAR, cLocation VARCHAR, sentOn timestamp, deliveredOn timestamp, pickUpName VARCHAR, pickUpAddress TEXT, destName VARCHAR, destAddress TEXT);
     INSERT INTO USERS (userid, username, fullname, email, sex, password, isadmin) VALUES ('eadmin123', 'emmsdan', 'emmanuel daniel', 'ecomje@gmal.com', 'male', '$2b$10$4qzMEL9oUbH54dRsuMYNs.S9c9Lsd1KctV0/0M2Cm00MPcfGhi10u', 'admin')`)
+      .then((resp) => {
+        this.setResponse(resp);
+        this.setStatus(200);
+        client.end();
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        client.end();
+      });
   }
 
   /**

@@ -20,6 +20,15 @@ class DatabaseManager {
    * @param {object} dbUrl (optional)
    * @returns {promise}
    */
+  static dbConnectString() {
+    return {
+      user: 'postgres',
+      host: 'localhost',
+      database: 'sendItDB',
+      password: process.env.PGPASS,
+      port: 5432
+    };
+  }
   static query(sql, fields = null, dbUrl = dbURL) {
     const client = new Client(dbUrl);
     client.connect();
