@@ -71,6 +71,7 @@ const server = app.listen(port, () => {
 
 process.on('exit', () => server.close());
 process.on('SIGTERM', () => server.close());
-process.on('uncaughtException', () => server.close());
-
+process.on('uncaughtException', function (err) {
+  console.log(err);
+}); 
 export default app;
