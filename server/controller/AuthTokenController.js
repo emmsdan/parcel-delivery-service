@@ -20,6 +20,9 @@ class AuthTokenController {
    * @returns {string}
    */
   static decodeToken(token) {
+    if (!token){
+      return false;
+    }
     return jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
   }
 }
