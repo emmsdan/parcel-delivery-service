@@ -23,7 +23,15 @@ app.use('/api/v1/', bodyParser.urlencoded({ extended: false }), defaultRouter);
 
 // handles error pages like 404
 app.use('*', errorRouter);
-
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.toString()
+    }
+  });
+  next();
+});
 /**
  * start listen to server
  * Create need tables on server start
@@ -73,5 +81,5 @@ process.on('exit', () => server.close());
 process.on('SIGTERM', () => server.close());
 process.on('uncaughtException', function (err) {
   console.log(err);
-}); 
+});
 export default app;
