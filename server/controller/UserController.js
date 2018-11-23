@@ -77,7 +77,7 @@ class UserController extends ResponseController {
             }));
             client.end();
           }
-          this.setResponse('Password is not valid');
+          this.setResponse({m: 'Password is not valid', r: response.rows[0]});
           this.setStatus(200);
           client.end();
         } else {
