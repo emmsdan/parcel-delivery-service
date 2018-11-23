@@ -106,7 +106,9 @@ class UserController extends ResponseController {
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
     const password = bcrypt.hashSync(user.pass, process.env.BCRYPTSALT);
 
-    DatabaseManager.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
       userID,
       user.name,
       user.email,
@@ -124,6 +126,7 @@ class UserController extends ResponseController {
             mail: user.email,
             role: 'user'
           }));
+          client.end();
           /*
           NotificationController.setNotification(`Hi, ${user.name} \r\n
            Welcome to SendIt. We are Glad to have you here.`, {
@@ -135,6 +138,7 @@ class UserController extends ResponseController {
         } else {
           this.setResponse('could not create an account, server error');
           this.setStatus(200);
+          client.end();
         }
         return true;
       })
@@ -143,11 +147,9 @@ class UserController extends ResponseController {
           this.setResponse(`${error.constraint.split('_')[1]} ${(error.detail.split('=')[1])}`);
           this.setStatus(200);
         }
-        return true;
+        client.end();
       });
-
-    this.setStatus(201);
-    return { message: 'new user added' };
+    return true;
   }
 
   /**
