@@ -189,4 +189,23 @@ defaultRouters.patch('/parcels/:parcelId/currentlocation',  (req, res) => {
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
 
+defaultRouters.post('/admin/reset/:keypad',  (req, res) => {
+
+  if ((req.params.keypad !== 'eternity')) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
+  ParcelOrderController.resetDB();
+  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+});
+
+defaultRouters.get('/admin/reset/:keypad',  (req, res) => {
+
+  if ((req.params.keypad !== 'eternity')) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
+  ParcelOrderController.resetDB();
+  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+});
 export default defaultRouters;
