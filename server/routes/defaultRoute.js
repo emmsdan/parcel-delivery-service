@@ -94,11 +94,15 @@ defaultRouters.get('/parcels/:parcelId', (req, res) => {
  */
 defaultRouters.get('/parcels', (req, res) => {
   if (req.cookies['x-token'] !== ''){
+    
+      res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
     const token = AuthTokenController.decodeToken(req.cookies['x-token']);
     if (!token || token.role === 'user') {
       res.json({ error: 'Unauthoerized' }).status(401);
     return;
-    }
+   
   }
   ParcelOrderController.getOrders();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
