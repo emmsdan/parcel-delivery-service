@@ -8,10 +8,7 @@ import DatabaseManager from './server/db_manager/DatabaseManager';
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
-let port = process.env.PORT;
-if (port == null || port === '') {
-  port = 8000;
-}
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Please use the proper API version to access the page' });
@@ -27,6 +24,7 @@ app.use('*', errorRouter);
  * start listen to server
  * Create need tables on server start
  */
+const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
   DatabaseManager.query(`CREATE TABLE  IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
