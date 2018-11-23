@@ -67,7 +67,7 @@ class UserController extends ResponseController {
     client.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
       .then((response) => {
         if (response.rowCount > 0) {
-          if (bcrypt.compareSync(user.pass, response.rows[0].password)) {
+          if (user.pass == response.rows[0].password) {
             this.setResponse({ success: 'Login successful' });
             this.setStatus(200);
             this.setheader(AuthTokenController.generateToken({
@@ -110,7 +110,7 @@ class UserController extends ResponseController {
     }
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
     const salt = bcrypt.genSaltSync(10);
-    const password = bcrypt.hashSync(user.pass, salt);
+    const password = user.pass;
 
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
@@ -225,6 +225,11 @@ class UserController extends ResponseController {
     }
     if (!validator.isMobilePhone(input.phone || ')*#23*#&')) {
       this.setResponse('Please Check Phone, (Invalid Credentials)');
+      this.setStatus(200);
+      return false;
+    }
+    if ((!validator.isAlphanumeric(input.pass))) {
+      this.setResponse('Please Check Password, (Alpha-Numerics Only)');
       this.setStatus(200);
       return false;
     }
