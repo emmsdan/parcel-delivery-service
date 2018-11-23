@@ -81,7 +81,7 @@ class UserController extends ResponseController {
           this.setStatus(200);
           client.end();
         } else {
-          this.setResponse('Email Does not Exist In Our Database');
+          this.setResponse({message: 'Email Does not Exist In Our Database', staatus: response });
           this.setStatus(200);
           client.end();
         }
