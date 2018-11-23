@@ -51,8 +51,29 @@ class ParcelOrderController extends ResponseController {
    * @param {number} id
    * @returns {array}
    */
-  getSingleParcel(id) {
-    return inArray(this.parcels, 'id', id);
+  getSpecificOrder(id) {
+    if (!validator.isAlpha(id)) {
+      this.setResponse('Invalid parcel ID specified');
+      this.setStatus(200);
+      return false;
+    }
+
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [id])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
