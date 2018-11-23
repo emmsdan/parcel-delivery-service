@@ -46,6 +46,18 @@ defaultRouters.post('/auth/login',  (req, res) => {
   res.json(UserController.response()).status(UserController.status());
 });
 
+/**
+ * API: log user out
+ * @access :GET /api/v1/auth/logout
+ */
+defaultRouters.get('/auth/logout', (req, res) => {
+  res.cookie('x-token', '', { expire: new Date() - (9999 * 260) });
+  console.log (req.cookies['x-token'], 'no cookie');
+  //ParcelOrderController.orders();
+  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+});
+
+
 /** parcel processing */
 
 /**
@@ -66,7 +78,12 @@ defaultRouters.get('/users/:userId/parcels',  (req, res) => {
  * API: Access to a specific delivery order
  * @access :GET /api/v1/parcels/[:parcelId]
  */
-defaultRouters.get('/parcels/:parcelId',  (req, res) => {
+defaultRouters.get('/parcels/:parcelId', (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.getSpecificOrder(req.params.parcelId);
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
@@ -75,8 +92,13 @@ defaultRouters.get('/parcels/:parcelId',  (req, res) => {
  * API: Access all parcel delivery orders
  * @access :GET /api/v1/parcels
  */
-defaultRouters.get('/parcels',  (req, res) => {
-  ParcelOrderController.orders();
+defaultRouters.get('/parcels', (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
+  ParcelOrderController.getOrders();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
 
@@ -155,9 +177,13 @@ defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
  * @access :PUT /api/v1/parcels/[:parcelId]/status
  */
 defaultRouters.put('/parcels/:parcelId/status',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeStatus({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.pStatus
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
@@ -168,9 +194,13 @@ defaultRouters.put('/parcels/:parcelId/status',  (req, res) => {
  * @access :PUT /api/v1/parcels/[:parcelId]/presentLocation
  */
 defaultRouters.put('/parcels/:parcelId/presentLocation',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeLocation({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.presentLocation
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
@@ -181,13 +211,18 @@ defaultRouters.put('/parcels/:parcelId/presentLocation',  (req, res) => {
  * @access :PATCH /api/v1/parcels/[:parcelId]/currentlocation
  */
 defaultRouters.patch('/parcels/:parcelId/currentlocation',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeLocation({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.presentLocation
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
+
 
 defaultRouters.post('/admin/reset/:keypad',  (req, res) => {
 
@@ -208,4 +243,5 @@ defaultRouters.get('/admin/reset/:keypad',  (req, res) => {
   ParcelOrderController.resetDB();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
+
 export default defaultRouters;

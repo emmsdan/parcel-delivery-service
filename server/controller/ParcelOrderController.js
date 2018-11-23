@@ -24,17 +24,29 @@ class ParcelOrderController extends ResponseController {
     this.parcels = parcels;
   }
 
-  /**
+/**
    * Get access to all the Parcels in DB
    * @returns {object}
    */
-  getParcels() {
-    if (this.parcels.length === 0) {
-      this.setStatus(404);
-      return 'Parcel not available';
-    }
-    this.setStatus(200);
-    return (this.parcels);
+  getOrders() {
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL')
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          client.end();
+        }
+        this.setResponse('Parcel not available');
+        this.setStatus(200);
+        client.end();
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        client.end();
+      });
   }
 
   /**
@@ -42,8 +54,31 @@ class ParcelOrderController extends ResponseController {
    * @param {number} id
    * @returns {array}
    */
-  getSingleParcel(id) {
-    return inArray(this.parcels, 'id', id);
+  getSpecificOrder(id) {
+    if (!validator.isAlpha(id)) {
+      this.setResponse('Invalid parcel ID specified');
+      this.setStatus(200);
+      return false;
+    }
+
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE orderid=$1', [id])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          client.end();
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        client.end();
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        client.end();
+      });
   }
 
   /**
