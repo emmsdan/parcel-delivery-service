@@ -1,1 +1,1 @@
-web: babel-node  controller/server.js
+web: npm start
