@@ -78,7 +78,7 @@ defaultRouters.get('/users/:userId/parcels',  (req, res) => {
  * API: Access to a specific delivery order
  * @access :GET /api/v1/parcels/[:parcelId]
  */
-defaultRouters.get('/parcels/:parcelId',  (req, res) => {
+defaultRouters.get('/parcels/:parcelId', (req, res) => {
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
     res.json({ error: 'Unauthoerized' }).status(401);
@@ -177,9 +177,13 @@ defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
  * @access :PUT /api/v1/parcels/[:parcelId]/status
  */
 defaultRouters.put('/parcels/:parcelId/status',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeStatus({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.pStatus
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
