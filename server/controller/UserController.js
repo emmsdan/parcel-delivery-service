@@ -1,6 +1,7 @@
 import validator from 'validator';
 import moment from 'moment';
 import bcrypt from 'bcrypt';
+import { Client } from 'pg';
 
 import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
