@@ -57,21 +57,23 @@ class ParcelOrderController extends ResponseController {
       this.setStatus(200);
       return false;
     }
-    return DatabaseManager.query('SELECT * FROM PARCEL WHERE userid=$1', [userid])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE userid=$1', [userid])
       .then((response) => {
         if (response.rowCount > 0) {
           this.setResponse(response.rows);
           this.setStatus(200);
-          return true;
+          client.end()
         }
         this.setResponse('Parcel not available for This User');
         this.setStatus(200);
-        return true;
+        client.end();
       })
       .catch((error) => {
         this.setResponse('server error');
         this.setStatus(200);
-        return false;
+        client.end();
       });
   }
 
@@ -97,7 +99,9 @@ class ParcelOrderController extends ResponseController {
     if (!this[validateNewOrder](order)) {
       return false;
     }
-    return DatabaseManager.query(
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query(
       'INSERT INTO Parcel (orderId, userId, pName, pDesc, pPix, weight, status, sentOn, pickUpName, pickUpAddress, destName, destAddress) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
       [
         orderId,
@@ -116,12 +120,12 @@ class ParcelOrderController extends ResponseController {
       .then((response) => {
         this.setResponse({ orderId, success: 'Parcel added successfully' });
         this.setStatus(200);
-        return false;
+        client.end();
       })
       .catch((error) => {
         this.setResponse(error.message);
         this.setStatus(200);
-        return false;
+        client.end();
       });
   }
 
@@ -157,16 +161,20 @@ class ParcelOrderController extends ResponseController {
       this.setStatus(200);
       return false;
     }
-    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [data.parcelId])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE orderid=$1', [data.parcelId])
       .then((response) => {
         if (response.rowCount > 0) {
           if (response.rows[0].userid === data.userId) {
             if (response.rows[0].status === 'delivered') {
               this.setResponse('Sorry, this Order has already been delivered. Can\'t Change status.');
               this.setStatus(200);
-              return true;
+              client.end();
             }
-            return DatabaseManager.query('UPDATE PARCEL SET destname=$1, destaddress=$2 WHERE userid=$3 AND orderid=$4', [
+            const client = new Client(DatabaseManager.dbConnectString());
+            client.connect();
+            client.query('UPDATE PARCEL SET destname=$1, destaddress=$2 WHERE userid=$3 AND orderid=$4', [
               data.data.destinationName,
               `${data.data.destinationAddress}:==:${data.data.destinationCode}`,
               data.userId,
@@ -175,26 +183,26 @@ class ParcelOrderController extends ResponseController {
               .then(() => {
                 this.setResponse('destination has been updated');
                 this.setStatus(200);
-                return true;
+                client.end();
               })
               .catch((error) => {
                 this.setResponse(error.message);
                 this.setStatus(200);
-                return true;
+                client.end();
               });
           }
           this.setResponse('Unauthorized access to Parcel');
           this.setStatus(200);
-          return true;
+          client.end();
         }
         this.setResponse('Parcel not available');
         this.setStatus(200);
-        return true;
+        client.end();
       })
       .catch((error) => {
         this.setResponse(`server error: ${error.message}`);
         this.setStatus(200);
-        return false;
+        client.end();
       });
   }
 
@@ -220,7 +228,9 @@ class ParcelOrderController extends ResponseController {
       return false;
     }
 
-    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
       .then((response) => {
         if (response.rowCount > 0) {
           if (response.rows[0].userid === ids.userId) {
@@ -232,26 +242,26 @@ class ParcelOrderController extends ResponseController {
               .then(() => {
                 this.setResponse('Parcel canceled');
                 this.setStatus(200);
-                return true;
+                client.end();
               })
               .catch((error) => {
                 this.setResponse(error);
                 this.setStatus(200);
-                return true;
+                client.end();
               });
           }
           this.setResponse('Unauthorized access to Parcel');
           this.setStatus(200);
-          return true;
+          client.end();
         }
         this.setResponse('Parcel not available');
         this.setStatus(200);
-        return true;
+        client.end();
       })
       .catch((error) => {
         this.setResponse(`server error: ${error.message}`);
         this.setStatus(200);
-        return false;
+        client.end();
       });
   }
 
