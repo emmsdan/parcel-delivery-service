@@ -27,13 +27,23 @@ class ParcelOrderController extends ResponseController {
    * Get access to all the Parcels in DB
    * @returns {object}
    */
-  getParcels() {
-    if (this.parcels.length === 0) {
-      this.setStatus(404);
-      return 'Parcel not available';
-    }
-    this.setStatus(200);
-    return (this.parcels);
+  getOrders() {
+    return DatabaseManager.query('SELECT * FROM PARCEL')
+      .then((response) => {
+        if (response.rowCount > 0) {
+          this.setResponse(response.rows);
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse('server error');
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
