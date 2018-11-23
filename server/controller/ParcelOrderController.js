@@ -410,7 +410,8 @@ class ParcelOrderController extends ResponseController {
         return false;
       })
       .catch((error) => {
-        this.setResponse({message: `server error: ${error.message}`, error });
+        this.setResponse({
+          message: `server error: ${error.message}`, error: error.stack });
         this.setStatus(200);
         return false;
       });
