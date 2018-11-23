@@ -284,20 +284,60 @@ class ParcelOrderController extends ResponseController {
       });
   }
 
+
   /**
-   *  Checks if parcel order exist
-   * @param {number} id : parcel id
-   * @returns {boolean}
+   * cancel parcel order from being delivered
+   * @param {object} ids : {parcelId, userId}
+   * @returns {object}
    */
-  orderExist(id) {
-    try {
-      if (this.parcels.find(parcels => parcels.userid === id)) {
-        return true;
-      }
-      return false;
-    } catch (err) {
+  changeStatus(ids) {
+    if (ids.data === undefined) {
+      this.setResponse('New Status type should be specified');
+      this.setStatus(200);
       return false;
     }
+    if (!validator.isAlpha(ids.data) || ids.data === 'canceled') {
+      this.setResponse('Invalid status type specified');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isNumeric(ids.parcelId)) {
+      this.setResponse('Invalid parcel Id specified');
+      this.setStatus(200);
+      return false;
+    }
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          if (response.rows[0].status !== 'delivered') {
+            return DatabaseManager.query('UPDATE PARCEL SET status=$1 WHERE orderid=$2', [
+              ids.data,
+              ids.parcelId
+            ])
+              .then(() => {
+                this.setResponse({ success: 'Parcel Status Updated' });
+                this.setStatus(200);
+                return true;
+              })
+              .catch((error) => {
+                this.setResponse(error);
+                this.setStatus(200);
+                return true;
+              });
+          }
+          this.setResponse('This Parcel can\'t updated');
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel is not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
