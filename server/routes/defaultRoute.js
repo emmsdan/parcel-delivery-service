@@ -194,9 +194,13 @@ defaultRouters.put('/parcels/:parcelId/status',  (req, res) => {
  * @access :PUT /api/v1/parcels/[:parcelId]/presentLocation
  */
 defaultRouters.put('/parcels/:parcelId/presentLocation',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeLocation({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.presentLocation
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
@@ -207,11 +211,29 @@ defaultRouters.put('/parcels/:parcelId/presentLocation',  (req, res) => {
  * @access :PATCH /api/v1/parcels/[:parcelId]/currentlocation
  */
 defaultRouters.patch('/parcels/:parcelId/currentlocation',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.changeLocation({
     parcelId: req.params.parcelId,
-    userId: UserController.role() || null,
     data: req.body.presentLocation
   });
+  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+});
+
+/**
+ * API: admin reset database
+ * @access :PATCH /api/v1/admin/reset
+ */
+defaultRouters.post('/admin/reset',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
+  ParcelOrderController.resetDB();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
 
