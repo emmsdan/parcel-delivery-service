@@ -78,17 +78,12 @@ class UserController extends ResponseController {
             client.end();
             return true;
           }
-          this.setResponse({
-            m: 'Password is not valid',
-            lp: (user.pass === response.rows[0].password),
-            psa: user.pass,
-            r: response.rows[0]
-          });
+          this.setResponse('Password is not valid');
           this.setStatus(200);
           client.end();
           return true;
         }
-        this.setResponse({message: 'Email Does not Exist In Our Database', staatus: response });
+        this.setResponse('Email Does not Exist In Our Database');
         this.setStatus(200);
         client.end();
         return true;
@@ -132,7 +127,7 @@ class UserController extends ResponseController {
     ])
       .then((response) => {
         if (response.rowCount > 0) {
-          this.setResponse({ success: 'Account created Successfully' });
+          this.setResponse({ success: 'Account created Successfully', userID });
           this.setStatus(200);
           this.setheader(AuthTokenController.generateToken({
             userId: userID,
