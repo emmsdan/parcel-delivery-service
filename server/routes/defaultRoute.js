@@ -103,9 +103,14 @@ defaultRouters.post('/parcels', (req, res) => {
  * @access :PUT /api/v1/parcels/[:parcelId]/cancel
  */
 defaultRouters.put('/parcels/:parcelId/cancel',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.cancelOrders({
     parcelId: req.params.parcelId,
-    userId: UserController.userId() || null
+    userId: token.userId
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
@@ -115,9 +120,14 @@ defaultRouters.put('/parcels/:parcelId/cancel',  (req, res) => {
  * @access :PATCH /api/v1/parcels/[:parcelId]/cancel
  */
 defaultRouters.patch('/parcels/:parcelId/cancel',  (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  if (!token) {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   ParcelOrderController.cancelOrders({
     parcelId: req.params.parcelId,
-    userId: UserController.userId() || null
+    userId: token.userId
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
