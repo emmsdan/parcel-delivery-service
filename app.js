@@ -26,41 +26,6 @@ app.use('*', errorRouter);
  */
 const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
-  DatabaseManager.query(`CREATE TABLE  IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    userId VARCHAR,
-    username VARCHAR,
-    fullname VARCHAR,
-    phone Numeric,
-    email VARCHAR  (60) UNIQUE,
-    sex VARCHAR,
-    password VARCHAR,
-    registered TIMESTAMP,
-    isAdmin Varchar
-  );
-  CREATE TABLE  IF NOT EXISTS parcel (
-    id SERIAL PRIMARY KEY,
-    orderId VARCHAR,
-    userId VARCHAR,
-    pName VARCHAR,
-    pDesc VARCHAR,
-    pPix Varchar,
-    weight Numeric,
-    weightmetric VARCHAR,
-    status VARCHAR,
-    sentOn timestamp,
-    deliveredOn timestamp,
-    pickUpName VARCHAR,
-    pickUpAddress TEXT,
-    destName VARCHAR,
-    destAddress TEXT
-  )`)
-    .then((response) => {
-      console.log('Table Created/Exist');
-    })
-    .catch((error) => {
-      console.log(`Error Message: ${error}`);
-    });
   console.log(`App server is listening on port ${port}!`);
 });
 
