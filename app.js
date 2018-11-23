@@ -8,6 +8,7 @@ import DatabaseManager from './server/db_manager/DatabaseManager';
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
 let port = process.env.PORT;
 if (port == null || port === '') {
   port = 8000;
