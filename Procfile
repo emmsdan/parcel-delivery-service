@@ -1,1 +1,1 @@
-web: babel-node  controller/server.js
+web: babel-node  app.js
