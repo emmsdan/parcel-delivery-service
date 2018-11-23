@@ -36,7 +36,7 @@ class DatabaseManager {
    */
   static client(dbUrl = dbURL) {
     const client = new Client(dbUrl);
-    return client.connect();
+    return client;
   }
 
   /**
