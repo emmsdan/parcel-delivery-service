@@ -1,12 +1,11 @@
 # parcel-delivery-service
 A courier service that helps users deliver parcels to different destinations. It provides courier quotes based on weight categories.
 
-[![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=master)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=api-endpoints)
+[![Build Status](https://travis-ci.org/emmsdan/parcel-delivery-service.png?branch=heroku-deploy)](https://travis-ci.org/emmsdan/parcel-delivery-service)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
-
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
-
+[![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=development)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=development)
+[![Maintainability](https://api.codeclimate.com/v1/badges/adea93f107d22afcaaf2/maintainability)](https://codeclimate.com/github/emmsdan/parcel-delivery-service/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/adea93f107d22afcaaf2/test_coverage)](https://codeclimate.com/github/emmsdan/parcel-delivery-service/test_coverage)
 ## This project is part of the Andela Fellowship Bootcamp Challenge.
 
 I created a set of API endpoints as defined below and used data structures

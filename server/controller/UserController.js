@@ -1,6 +1,7 @@
 import validator from 'validator';
 import moment from 'moment';
 import bcrypt from 'bcrypt';
+import { Client } from 'pg';
 
 import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
@@ -23,6 +24,7 @@ class UserController extends ResponseController {
     super(parcel);
     this.parcels = parcel;
     this.usersDatabase = users;
+    this.setResponse('');
   }
 
   /**
@@ -61,10 +63,12 @@ class UserController extends ResponseController {
       return false;
     }
 
-    return DatabaseManager.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
       .then((response) => {
         if (response.rowCount > 0) {
-          if (bcrypt.compareSync(user.pass, response.rows[0].password)) {
+          if (user.pass === response.rows[0].password) {
             this.setResponse({ success: 'Login successful' });
             this.setStatus(200);
             this.setheader(AuthTokenController.generateToken({
@@ -72,19 +76,23 @@ class UserController extends ResponseController {
               mail: response.rows[0].email,
               role: response.rows[0].isadmin
             }));
+            client.end();
             return true;
           }
           this.setResponse('Password is not valid');
-          this.setStatus(200);
-        } else {
-          this.setResponse('Email Does not Exist In Our Database');
-          this.setStatus(200);
+          this.setStatus(403);
+          client.end();
+          return true;
         }
+        this.setResponse('Email Does not Exist In Our Database');
+        this.setStatus(403);
+        client.end();
         return true;
       })
       .catch((error) => {
         this.setResponse(error.detail);
-        this.setStatus(200);
+        this.setStatus(403);
+        client.end();
         return true;
       });
   }
@@ -111,7 +119,9 @@ class UserController extends ResponseController {
       user.userType = 'user';
     }
 
-    DatabaseManager.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
       userID,
       user.name,
       user.email,
@@ -122,13 +132,14 @@ class UserController extends ResponseController {
     ])
       .then((response) => {
         if (response.rowCount > 0) {
-          this.setResponse({ success: 'Account created Successfully' });
-          this.setStatus(200);
+          this.setResponse({ success: 'Account created Successfully', userID });
+          this.setStatus(201);
           this.setheader(AuthTokenController.generateToken({
             userId: userID,
             mail: user.email,
             role: user.userType
           }));
+          client.end();
           /*
           NotificationController.setNotification(`Hi, ${user.name} \r\n
            Welcome to SendIt. We are Glad to have you here.`, {
@@ -139,20 +150,19 @@ class UserController extends ResponseController {
           */
         } else {
           this.setResponse('could not create an account, server error');
-          this.setStatus(200);
+          this.setStatus(304);
+          client.end();
         }
         return true;
       })
       .catch((error) => {
         if (error.detail.endsWith('already exists.')) {
           this.setResponse(`${error.constraint.split('_')[1]} ${(error.detail.split('=')[1])}`);
-          this.setStatus(200);
+          this.setStatus(412);
         }
-        return true;
+        client.end();
       });
-
-    this.setStatus(201);
-    return { message: 'new user added' };
+    return true;
   }
 
   /**
@@ -222,6 +232,11 @@ class UserController extends ResponseController {
     }
     if (!validator.isMobilePhone(input.phone || ')*#23*#&')) {
       this.setResponse('Please Check Phone, (Invalid Credentials)');
+      this.setStatus(200);
+      return false;
+    }
+    if ((!validator.isAlphanumeric(input.pass))) {
+      this.setResponse('Please Check Password, (Alpha-Numerics Only)');
       this.setStatus(200);
       return false;
     }

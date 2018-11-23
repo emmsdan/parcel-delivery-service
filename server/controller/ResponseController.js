@@ -18,7 +18,7 @@ class ResponseController {
     if (new.target === ResponseController) {
       throw new Error('Class Can\'t can be Instantiated');
     }
-    this[response] = { status: this.status(), error: 'Please Check, your Connection' };
+    this[response] = { status: this.status(), error: 'Unhandled Response Call' };
     this[statusCode] = 200;
   }
 

@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { Client } from 'pg';
 
 import defaultRouter from './server/routes/defaultRoute';
 import errorRouter from './server/routes/errorRoute';
@@ -8,10 +9,7 @@ import DatabaseManager from './server/db_manager/DatabaseManager';
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
-let port = process.env.PORT;
-if (port == null || port === '') {
-  port = 8000;
-}
+
 
 app.get('/', (req, res) => {
   res.json({ message: 'Please use the proper API version to access the page' });
@@ -27,8 +25,12 @@ app.use('*', errorRouter);
  * start listen to server
  * Create need tables on server start
  */
+const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
-  DatabaseManager.query(`CREATE TABLE  IF NOT EXISTS users (
+
+  const client = new Client(DatabaseManager.dbConnectString());
+  client.connect();
+  client.query(`CREATE TABLE  IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     userId VARCHAR,
     username VARCHAR,
@@ -60,9 +62,11 @@ const server = app.listen(port, () => {
   )`)
     .then((response) => {
       console.log('Table Created/Exist');
+      client.end();
     })
     .catch((error) => {
       console.log(`Error Message: ${error}`);
+      client.end();
     });
   console.log(`App server is listening on port ${port}!`);
 });
