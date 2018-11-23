@@ -24,7 +24,13 @@ class DatabaseManager {
     const client = new Client(dbUrl);
     client.connect();
     if (fields === null) {
-      return client.query(sql);
+      return client.query(sql)
+      .then((resp) => {
+        client.end()
+      })
+      .catch((error) => {
+        client.end()
+      });
     }
     return client.query(sql, fields);
   }
