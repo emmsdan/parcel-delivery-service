@@ -46,6 +46,18 @@ defaultRouters.post('/auth/login',  (req, res) => {
   res.json(UserController.response()).status(UserController.status());
 });
 
+/**
+ * API: log user out
+ * @access :GET /api/v1/auth/logout
+ */
+defaultRouters.get('/auth/logout', (req, res) => {
+  res.cookie('x-token', '', { expire: new Date() - (9999 * 260) });
+  console.log (req.cookies['x-token'], 'no cookie');
+  //ParcelOrderController.orders();
+  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+});
+
+
 /** parcel processing */
 
 /**
@@ -75,8 +87,14 @@ defaultRouters.get('/parcels/:parcelId',  (req, res) => {
  * API: Access all parcel delivery orders
  * @access :GET /api/v1/parcels
  */
-defaultRouters.get('/parcels',  (req, res) => {
-  ParcelOrderController.orders();
+defaultRouters.get('/parcels', (req, res) => {
+  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+  console.log (token)
+  if (!token || token.role === 'user') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
+  ParcelOrderController.getOrders();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
 
