@@ -25,7 +25,7 @@
               </tr>
               <tr>
                 <th>Current Location</th>
-                <td> <input value="in transit"> </td>
+                <td> <input value="Lokoja, Abuja High Way"> </td>
               </tr>
               <tr>
                 <th>Weight</th> <td> 20kg </td>
@@ -43,9 +43,9 @@
                 <th class="">Status</th>
                 <th class="red">
                   <select onchange="toast(this.value)">
-                    <option>Delivered</option>
+                      <option>Delivered</option>
+                      <option>ontransit</option>
                     <option selected>Pending</option>
-                    <option> Canceled </option>
                   </select>
               </tr>
             </table>

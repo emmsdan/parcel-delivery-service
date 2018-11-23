@@ -92,24 +92,24 @@
       <div class="modal-content w70p">
         <h5> Update Destination</h5>
         <div class="clear-xx"></div>
-        <form action="updateparcel" method="POST">
+        <form action="#updateparcel" method="POST">
 
           <div class="group ">
-            <input type="text" required class="">
+            <input type="text" class="">
             <span class="highlight"></span>
             <label>Destination Personel's Name</label>
           </div>
           <div class="group ">
-            <input type="text" required class="">
+            <input type="text" class="">
             <span class="highlight"></span>
             <label>Destination Code</label>
           </div>
           <div class="group ">
-            <textarea type="text" required class=""></textarea>
+            <textarea type="text" class=""></textarea>
             <span class="highlight"></span>
             <label>Destination Address</label>
           </div>
-        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Update Destination </button>
+        <button type="text" class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Update Destination </button>
         </form>
       </div>
     </div>
@@ -117,31 +117,24 @@
       <div class="modal-content w70p">
         <h5> Update Location</h5>
         <div class="clear-xx"></div>
-        <form action="updateparcel" method="POST">
+        <form action="#" method="POST">
 
           <div class="group ">
-            <textarea type="text" required class=""></textarea>
+            <textarea type="text" class=""></textarea>
             <span class="highlight"></span>
             <label>Current Location</label>
           </div>
-        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Change Location </button>
+        <button type="text" class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Change Location </button>
         </form>
       </div>
     </div>
     <div class="modal" id="updateStatus">
-      <div class="modal-content w70p">
+      <div class="modal-content w70p" style="max-width: 400px;">
         <h5> Update Status</h5>
         <div class="clear-xx"></div>
-        <form action="updateparcel" method="POST">
-
-          <div class="group ">
-            <select>
-              <option>Delivered</option>
-              <option>Transit</option>
-              <option>Canceled</option>
-            </select>
-          </div>
-        <button type="text" required class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Change Location </button>
+        <form action="#" method="POST">
+          <h4 class="red-text"> Are you sure you want to Cancel this Order? </h4>
+        <button type="text" class="x-text" style="position: relative;bottom: 10%;" data-toast="Parcel Destination Updated Successfully"> Cancel Order Now </button>
         </form>
       </div>
     </div>
