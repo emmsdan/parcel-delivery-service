@@ -104,7 +104,8 @@ class UserController extends ResponseController {
       return false;
     }
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
-    const password = bcrypt.hashSync(user.pass, process.env.BCRYPTSALT);
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(user.pass, salt);
 
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
