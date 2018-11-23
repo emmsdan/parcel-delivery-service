@@ -219,7 +219,7 @@ class ParcelOrderController extends ResponseController {
       this.setStatus(200);
       return false;
     }
-    
+
     return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
       .then((response) => {
         if (response.rowCount > 0) {

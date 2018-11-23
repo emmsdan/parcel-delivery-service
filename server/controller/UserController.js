@@ -62,7 +62,9 @@ class UserController extends ResponseController {
       return false;
     }
 
-    return DatabaseManager.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
       .then((response) => {
         if (response.rowCount > 0) {
           if (bcrypt.compareSync(user.pass, response.rows[0].password)) {
@@ -73,20 +75,22 @@ class UserController extends ResponseController {
               mail: response.rows[0].email,
               role: response.rows[0].isadmin
             }));
-            return true;
+            client.end();
           }
           this.setResponse('Password is not valid');
           this.setStatus(200);
+          client.end();
         } else {
           this.setResponse('Email Does not Exist In Our Database');
           this.setStatus(200);
+          client.end();
         }
         return true;
       })
       .catch((error) => {
         this.setResponse(error.detail);
         this.setStatus(200);
-        return true;
+        client.end();
       });
   }
 
