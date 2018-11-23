@@ -126,20 +126,75 @@ class ParcelOrderController extends ResponseController {
 
   /**
    * updated parcel status or destination
-   * @param {number} id
-   * @param {object} field
-   * @param {string} value
+   * @param {object} data
    * @returns {object}
    */
-  updateParcel(id, field, value = null) {
-    if (value !== null) {
-      this.getSingleParcel(id).field = value;
-      return 'status has been updated' ;
+  changeDestination(data) {
+    if (!validator.isAlphanumeric(data.userId)) {
+      this.setResponse('Invalid userId specified');
+      this.setStatus(200);
+      return false;
     }
-    const parcel = this.getSingleParcel(id);
-    parcel.destination = field.destination;
-    parcel.destinationcode = field.destinationcode;
-    return 'destination has been updated';
+    if (!validator.isNumeric(data.parcelId)) {
+      this.setResponse('Invalid parcelId specified');
+      this.setStatus(200);
+      return false;
+    }
+
+    if (data.data.destinationName === undefined) {
+      this.setResponse('Please Enter the Name of personel to deliver to');
+      this.setStatus(200);
+      return false;
+    }
+    if (data.data.destinationAddress === undefined) {
+      this.setResponse('Please Enter the Delivery Address');
+      this.setStatus(200);
+      return false;
+    }
+    if (data.data.destinationCode === undefined) {
+      this.setResponse('Please Enter the Delivery Area Post Code');
+      this.setStatus(200);
+      return false;
+    }
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [data.parcelId])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          if (response.rows[0].userid === data.userId) {
+            if (response.rows[0].status === 'delivered') {
+              this.setResponse('Sorry, this Order has already been delivered. Can\'t Change status.');
+              this.setStatus(200);
+              return true;
+            }
+            return DatabaseManager.query('UPDATE PARCEL SET destname=$1, destaddress=$2 WHERE userid=$3 AND orderid=$4', [
+              data.data.destinationName,
+              `${data.data.destinationAddress}:==:${data.data.destinationCode}`,
+              data.userId,
+              data.parcelId
+            ])
+              .then(() => {
+                this.setResponse('destination has been updated');
+                this.setStatus(200);
+                return true;
+              })
+              .catch((error) => {
+                this.setResponse(error.message);
+                this.setStatus(200);
+                return true;
+              });
+          }
+          this.setResponse('Unauthorized access to Parcel');
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
