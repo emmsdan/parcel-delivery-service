@@ -1,7 +1,6 @@
 <a href="./" class="logo"> <img src="./assets/img/logo.png" /></a>
 <nav>
   <a href="./">Home</a>
-  <a href="track.html">Track</a>
   <a href="auth.html?page=signup">Sign up</a>
   <a href="auth.html?page=signin">Login</a>
   <a href="admin.html">Admin</a>
