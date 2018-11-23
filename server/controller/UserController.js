@@ -104,7 +104,12 @@ class UserController extends ResponseController {
       return false;
     }
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
-    const password = bcrypt.hashSync(user.pass, process.env.BCRYPTSALT);
+    const salt = bcrypt.genSaltSync(10);
+    const password = bcrypt.hashSync(user.pass, salt);
+
+    if (user.userType === undefined) {
+      user.userType = 'user';
+    }
 
     DatabaseManager.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
       userID,
@@ -113,7 +118,7 @@ class UserController extends ResponseController {
       'unspecified',
       password,
       moment(),
-      'user'
+      user.userType
     ])
       .then((response) => {
         if (response.rowCount > 0) {
@@ -122,7 +127,7 @@ class UserController extends ResponseController {
           this.setheader(AuthTokenController.generateToken({
             userId: userID,
             mail: user.email,
-            role: 'user'
+            role: user.userType
           }));
           /*
           NotificationController.setNotification(`Hi, ${user.name} \r\n
