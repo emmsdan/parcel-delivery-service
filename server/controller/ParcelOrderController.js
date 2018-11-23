@@ -144,19 +144,58 @@ class ParcelOrderController extends ResponseController {
 
   /**
    * cancel parcel order from being delivered
-   * @param {number} id : parcel id
+   * @param {object} ids : {parcelId, userId}
    * @returns {object}
    */
-  cancelParcel(id) {
-    const parcel = this.getSingleParcel(id);
-    if (typeof parcel === 'object') {
-      if (parcel.status === 'transit' && parcel.status === 'delivered') {
-        return `This parcel cannot be canceled, Its status is ${parcel.status}` ;
-      }
-      parcel.status = 'canceled';
-      return 'This parcel has be canceled';
+  cancelOrders(ids) {
+    if (ids.userId === undefined) {
+      this.setResponse('Please Login to continue');
+      this.setStatus(200);
+      return false;
     }
-    return 'parcel not found';
+    if (!validator.isAlphanumeric(ids.userId)) {
+      this.setResponse('Invalid userId specified');
+      this.setStatus(200);
+      return false;
+    }
+    if (!validator.isNumeric(ids.parcelId)) {
+      this.setResponse('Invalid parcelId specified');
+      this.setStatus(200);
+      return false;
+    }
+    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+      .then((response) => {
+        if (response.rowCount > 0) {
+          if (response.rows[0].userid === ids.userId) {
+            return DatabaseManager.query('UPDATE PARCEL SET status=$1 WHERE userid=$2 AND orderid=$3', [
+              'canceled',
+              ids.userId,
+              ids.parcelId
+            ])
+              .then(() => {
+                this.setResponse('Parcel canceled');
+                this.setStatus(200);
+                return true;
+              })
+              .catch((error) => {
+                this.setResponse(error);
+                this.setStatus(200);
+                return true;
+              });
+          }
+          this.setResponse('Unauthorized access to Parcel');
+          this.setStatus(200);
+          return true;
+        }
+        this.setResponse('Parcel not available');
+        this.setStatus(200);
+        return true;
+      })
+      .catch((error) => {
+        this.setResponse(`server error: ${error.message}`);
+        this.setStatus(200);
+        return false;
+      });
   }
 
   /**
