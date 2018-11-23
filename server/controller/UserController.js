@@ -67,7 +67,7 @@ class UserController extends ResponseController {
     client.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
       .then((response) => {
         if (response.rowCount > 0) {
-          if (user.pass == response.rows[0].password) {
+          if (user.pass === response.rows[0].password) {
             this.setResponse({ success: 'Login successful' });
             this.setStatus(200);
             this.setheader(AuthTokenController.generateToken({
@@ -76,6 +76,7 @@ class UserController extends ResponseController {
               role: response.rows[0].isadmin
             }));
             client.end();
+            return true;
           }
           this.setResponse({
             m: 'Password is not valid',
@@ -85,17 +86,18 @@ class UserController extends ResponseController {
           });
           this.setStatus(200);
           client.end();
-        } else {
-          this.setResponse({message: 'Email Does not Exist In Our Database', staatus: response });
-          this.setStatus(200);
-          client.end();
+          return true;
         }
+        this.setResponse({message: 'Email Does not Exist In Our Database', staatus: response });
+        this.setStatus(200);
+        client.end();
         return true;
       })
       .catch((error) => {
         this.setResponse(error.detail);
         this.setStatus(200);
         client.end();
+        return true;
       });
   }
 
