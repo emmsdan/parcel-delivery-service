@@ -228,8 +228,8 @@ defaultRouters.patch('/parcels/:parcelId/currentlocation',  (req, res) => {
  * @access :PATCH /api/v1/admin/reset
  */
 defaultRouters.post('/admin/reset/:keypad',  (req, res) => {
-  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
-  if ((req.params.keypad !== 'eternity') || (!token || token.role === 'user')) {
+  
+  if ((req.params.keypad !== 'eternity')) {
     res.json({ error: 'Unauthoerized' }).status(401);
     return;
   }
