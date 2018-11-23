@@ -93,10 +93,12 @@ defaultRouters.get('/parcels/:parcelId', (req, res) => {
  * @access :GET /api/v1/parcels
  */
 defaultRouters.get('/parcels', (req, res) => {
-  const token = AuthTokenController.decodeToken(req.cookies['x-token']);
-  if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+  if (req.cookies['x-token'] !== ''){
+    const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+    if (!token || token.role === 'user') {
+      res.json({ error: 'Unauthoerized' }).status(401);
     return;
+    }
   }
   ParcelOrderController.getOrders();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
