@@ -21,7 +21,7 @@ class DatabaseManager {
    * @returns {promise}
    */
   static dbConnectString() {
-    return {
+    return process.env.DATABASE_URL || {
       user: 'postgres',
       host: 'localhost',
       database: 'sendItDB',
