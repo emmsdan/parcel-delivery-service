@@ -52,11 +52,12 @@ defaultRouters.post('/auth/login', (req, res) => {
  */
 defaultRouters.get('/auth/logout', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.cookie('x-token', '', { expire: new Date(Date.now() - 864e5) });
+    res.clearCookie('x-token');
     res.json({ error: 'This User already Logged out.', status: 205 }).status(205);
     return;
   }
   res.cookie('x-token', '', { expire: new Date(Date.now() - 864e5) });
+  res.clearCookie('x-token');
   res.json({ data: 'logged out, successfully', status: 200 }).status(200);
 });
 
