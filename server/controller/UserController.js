@@ -24,6 +24,7 @@ class UserController extends ResponseController {
     super(parcel);
     this.parcels = parcel;
     this.usersDatabase = users;
+    this.setResponse('');
   }
 
   /**
