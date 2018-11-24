@@ -111,6 +111,7 @@ defaultRouters.get('/parcels', (req, res) => {
   if (!token || token.role === 'user') {
     res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
+
   }
   ParcelOrderController.getOrders();
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
