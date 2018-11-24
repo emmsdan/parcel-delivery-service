@@ -1,7 +1,7 @@
 # parcel-delivery-service
 A courier service that helps users deliver parcels to different destinations. It provides courier quotes based on weight categories.
 
-[![Build Status](https://travis-ci.org/emmsdan/parcel-delivery-service.png?branch=heroku-deploy)](https://travis-ci.org/Princesso/Send-IT)
+[![Build Status](https://travis-ci.org/emmsdan/parcel-delivery-service.png?branch=heroku-deploy)](https://travis-ci.org/emmsdan/parcel-delivery-service)
 [![Coverage Status](https://coveralls.io/repos/github/emmsdan/parcel-delivery-service/badge.svg?branch=development)](https://coveralls.io/github/emmsdan/parcel-delivery-service?branch=development)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5bddd6a59c29bb2b61000967/maintainability)](https://codeclimate.com/github/emmsdan/parcel-delivery-service/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5bddd6a59c29bb2b61000967/test_coverage)](https://codeclimate.com/github/emmsdan/parcel-delivery-service/test_coverage)
