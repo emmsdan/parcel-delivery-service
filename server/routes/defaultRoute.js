@@ -51,10 +51,13 @@ defaultRouters.post('/auth/login', (req, res) => {
  * @access :GET /api/v1/auth/logout
  */
 defaultRouters.get('/auth/logout', (req, res) => {
+  if (req.cookies['x-token'] === '') {
+    res.json({ error: 'This User already Logged out.', status: 205 }).status(205);
+    return;
+  }
   res.cookie('x-token', '', { expire: new Date(Date.now() - 864e5) });
-  res.json('logged out, successfully');
+  res.json({ data: 'logged out, successfully', status: 200 }).status(200);
 });
-
 
 /** parcel processing */
 
@@ -64,12 +67,12 @@ defaultRouters.get('/auth/logout', (req, res) => {
  */
 defaultRouters.get('/users/:userId/parcels', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || (token.role === 'user' && token.userId !== req.params.userId)) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.getUsersOrder(req.params.userId);
@@ -82,12 +85,12 @@ defaultRouters.get('/users/:userId/parcels', (req, res) => {
  */
 defaultRouters.get('/parcels/:parcelId', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.getSpecificOrder(req.params.parcelId);
@@ -100,12 +103,12 @@ defaultRouters.get('/parcels/:parcelId', (req, res) => {
  */
 defaultRouters.get('/parcels', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.getOrders();
@@ -119,7 +122,7 @@ defaultRouters.get('/parcels', (req, res) => {
 defaultRouters.post('/parcels', (req, res) => {
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
 
@@ -136,12 +139,12 @@ defaultRouters.post('/parcels', (req, res) => {
  */
 defaultRouters.put('/parcels/:parcelId/cancel', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.cancelOrders({
@@ -157,12 +160,12 @@ defaultRouters.put('/parcels/:parcelId/cancel', (req, res) => {
  */
 defaultRouters.patch('/parcels/:parcelId/cancel', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.cancelOrders({
@@ -178,12 +181,12 @@ defaultRouters.patch('/parcels/:parcelId/cancel', (req, res) => {
  */
 defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || (token.role !== 'user' || token.userId === undefined)) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.changeDestination({
@@ -200,12 +203,12 @@ defaultRouters.put('/parcels/:parcelId/destination', (req, res) => {
  */
 defaultRouters.put('/parcels/:parcelId/status', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.changeStatus({
@@ -221,12 +224,12 @@ defaultRouters.put('/parcels/:parcelId/status', (req, res) => {
  */
 defaultRouters.put('/parcels/:parcelId/presentLocation', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.changeLocation({
@@ -242,12 +245,12 @@ defaultRouters.put('/parcels/:parcelId/presentLocation', (req, res) => {
  */
 defaultRouters.patch('/parcels/:parcelId/currentlocation', (req, res) => {
   if (req.cookies['x-token'] === '') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.changeLocation({
@@ -260,7 +263,7 @@ defaultRouters.patch('/parcels/:parcelId/currentlocation', (req, res) => {
 
 defaultRouters.post('/admin/reset/:keypad', (req, res) => {
   if ((req.params.keypad !== 'eternity')) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.resetDB();
@@ -269,7 +272,7 @@ defaultRouters.post('/admin/reset/:keypad', (req, res) => {
 
 defaultRouters.get('/admin/reset/:keypad', (req, res) => {
   if ((req.params.keypad !== 'eternity')) {
-    res.json({ error: 'Unauthoerized' }).status(401);
+    res.json({ error: 'Unauthoerized', status: 401 }).status(401);
     return;
   }
   ParcelOrderController.resetDB();

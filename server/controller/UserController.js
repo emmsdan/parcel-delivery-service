@@ -80,18 +80,18 @@ class UserController extends ResponseController {
             return true;
           }
           this.setResponse('Password is not valid');
-          this.setStatus(200);
+          this.setStatus(403);
           client.end();
           return true;
         }
         this.setResponse('Email Does not Exist In Our Database');
-        this.setStatus(200);
+        this.setStatus(403);
         client.end();
         return true;
       })
       .catch((error) => {
         this.setResponse(error.detail);
-        this.setStatus(200);
+        this.setStatus(403);
         client.end();
         return true;
       });
@@ -129,7 +129,7 @@ class UserController extends ResponseController {
       .then((response) => {
         if (response.rowCount > 0) {
           this.setResponse({ success: 'Account created Successfully', userID });
-          this.setStatus(200);
+          this.setStatus(201);
           this.setheader(AuthTokenController.generateToken({
             userId: userID,
             mail: user.email,
@@ -146,7 +146,7 @@ class UserController extends ResponseController {
           */
         } else {
           this.setResponse('could not create an account, server error');
-          this.setStatus(200);
+          this.setStatus(304);
           client.end();
         }
         return true;
@@ -154,7 +154,7 @@ class UserController extends ResponseController {
       .catch((error) => {
         if (error.detail.endsWith('already exists.')) {
           this.setResponse(`${error.constraint.split('_')[1]} ${(error.detail.split('=')[1])}`);
-          this.setStatus(200);
+          this.setStatus(412);
         }
         client.end();
       });
