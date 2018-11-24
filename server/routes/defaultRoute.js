@@ -93,6 +93,10 @@ defaultRouters.get('/parcels/:parcelId', (req, res) => {
  * @access :GET /api/v1/parcels
  */
 defaultRouters.get('/parcels', (req, res) => {
+  if (req.cookies['x-token'] === '') {
+    res.json({ error: 'Unauthoerized' }).status(401);
+    return;
+  }
   const token = AuthTokenController.decodeToken(req.cookies['x-token']);
   if (!token || token.role === 'user') {
     res.json({ error: 'Unauthoerized' }).status(401);
