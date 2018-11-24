@@ -3,7 +3,7 @@ import express from 'express';
 const errorRouter = express.Router();
 
 errorRouter.use((req, res) => {
-  res.json({ message: 'data not found', status: 404 }, 404);
+  res.json({ message: 'Oops!  We can\'t seem to find the API you\'re looking for. Try other routes', status: 404 }, 404);
 });
 
 errorRouter.use((req, res) => {
