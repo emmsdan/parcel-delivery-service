@@ -113,7 +113,11 @@ class UserController extends ResponseController {
     }
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
     const salt = bcrypt.genSaltSync(10);
-    const password = user.pass;
+    const password = bcrypt.hashSync(user.pass, salt);
+
+    if (user.userType === undefined) {
+      user.userType = 'user';
+    }
 
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
@@ -124,7 +128,7 @@ class UserController extends ResponseController {
       'unspecified',
       password,
       moment(),
-      'user'
+      user.userType
     ])
       .then((response) => {
         if (response.rowCount > 0) {
@@ -133,7 +137,7 @@ class UserController extends ResponseController {
           this.setheader(AuthTokenController.generateToken({
             userId: userID,
             mail: user.email,
-            role: 'user'
+            role: user.userType
           }));
           client.end();
           /*
