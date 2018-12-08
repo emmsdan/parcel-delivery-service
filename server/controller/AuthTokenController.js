@@ -38,5 +38,22 @@ class AuthTokenController {
     }
     next();
   }
+
+  /**
+   * check role Token
+   * @param {string} req
+   * @param {string} res
+   * @param {string} next
+   * @returns {string}
+   */
+  static adminToken(req, res, next) {
+    AuthTokenController.checkToken(req, res, next);
+    const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+    if (token.role === 'user' || token.userId === undefined) {
+      res.json({ error: 'Unauthoerized', status: 401 }).status(401);
+      return;
+    }
+    next();
+  }
 }
 export default AuthTokenController;
