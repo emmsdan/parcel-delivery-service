@@ -29,17 +29,24 @@ class DatabaseManager {
       port: 5432
     };
   }
+
+  /**
+   * @param {str} sql
+   * @param {object} fields
+   * @param {string/object} dbUrl
+   * @returns {promise}
+   */
   static query(sql, fields = null, dbUrl = dbURL) {
     const client = new Client(dbUrl);
     client.connect();
     if (fields === null) {
       return client.query(sql)
-      .then((resp) => {
-        client.end()
-      })
-      .catch((error) => {
-        client.end()
-      });
+        .then((resp) => {
+          client.end();
+        })
+        .catch((error) => {
+          client.end();
+        });
     }
     return client.query(sql, fields);
   }
