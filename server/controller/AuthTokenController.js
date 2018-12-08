@@ -17,10 +17,26 @@ class AuthTokenController {
   /**
    * decode generated Token
    * @param {string} token
-   * @returns {string}
+   * @returns {object}
    */
   static decodeToken(token) {
+    if (!token) return false;
     return jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
+  }
+
+  /**
+   * check Token
+   * @param {string} req
+   * @param {string} res
+   * @param {string} next
+   * @returns {string}
+   */
+  static checkToken(req, res, next) {
+    if (req.cookies['x-token'] === undefined && req.url.search('auth') < 1) {
+      res.json({ error: 'Unauthoerized', status: 401 }).status(401);
+      return;
+    }
+    next();
   }
 }
 export default AuthTokenController;
