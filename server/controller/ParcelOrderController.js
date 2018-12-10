@@ -1,12 +1,10 @@
 import validator from 'validator';
 import moment from 'moment';
-import bcrypt from 'bcrypt';
 import { Client } from 'pg';
 
-import { inArray, generateID, isEmpty } from '../helpers/helper';
+import { generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
 import DatabaseManager from '../db_manager/DatabaseManager';
-import NotificationController from './NotificationController';
 
 const date = moment();
 const validateNewOrder = Symbol('validateNewOrder');
@@ -24,29 +22,37 @@ class ParcelOrderController extends ResponseController {
     this.parcels = parcels;
   }
 
-/**
+  /**
    * Get access to all the Parcels in DB
+   * @param {object} res
    * @returns {object}
    */
-  getOrders() {
+  getOrders(res) {
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
-    client.query('SELECT * FROM PARCEL')
+    return client.query('SELECT * FROM PARCEL')
       .then((response) => {
         if (response.rowCount > 0) {
           this.setResponse(response.rows);
           this.setStatus(200);
-          client.end();
+          this.endResponse(client, res);
+          return true;
         }
         this.setResponse('Parcel not available');
         this.setStatus(200);
-        client.end();
+        this.endResponse(client, res);
       })
       .catch((error) => {
+        console.log (error, 'spop');
         this.setResponse(error.message);
         this.setStatus(204);
-        client.end();
+        this.endResponse(client, res);
       });
+  }
+
+  endResponse(client, res) {
+    client.end();
+    res.json(this.response()).status(this.status());
   }
 
   /**
@@ -101,8 +107,11 @@ class ParcelOrderController extends ResponseController {
    * @param {string/number} userid
    * @returns {array/object}
    */
-  getUsersOrder(userid) {
-    if (!this.validateID(userid)) return false;
+  getUsersOrder(userid, res) {
+    if (!this.validateID(userid)) {
+      res.json(this.response()).status(this.status());
+      return false;
+    }
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
     client.query('SELECT * FROM PARCEL WHERE userid=$1', [userid])
@@ -110,37 +119,45 @@ class ParcelOrderController extends ResponseController {
         if (response.rowCount > 0) {
           this.setResponse(response.rows);
           this.setStatus(200);
-          client.end()
+          client.end();
+          res.json(this.response()).status(this.status());
         }
         this.setResponse('Parcel not available for This User');
         this.setStatus(200);
         client.end();
+        res.json(this.response()).status(this.status());
       })
       .catch((error) => {
         this.setResponse(error.message);
         this.setStatus(204);
         client.end();
+        res.json(this.response()).status(this.status());
       });
+    return true;
   }
 
 
   /**
    *  Create Parcel delivery order
    * @param {object} data
+   * @param {object} res
    * @returns {object}
    */
-  createOrders(data) {
+  createOrders(data, res) {
     const order = data.data;
-
-    if (!this.validateID(data.userId)) return false;
-
+    if (!this.validateID(data.userId)) {
+      res.json(this.response()).status(this.status());
+      return false;
+    }
     if (isEmpty(order)) {
       this.setResponse('You need to supply necessary Credentials');
       this.setStatus(417);
+      res.json(this.response()).status(this.status());
       return false;
     }
     const orderId = (generateID(222).toString() + date.valueOf().toString());
     if (!this[validateNewOrder](order)) {
+      res.json(this.response()).status(this.status());
       return false;
     }
     const client = new Client(DatabaseManager.dbConnectString());
@@ -160,17 +177,21 @@ class ParcelOrderController extends ResponseController {
         `${order.pickUpAddress}:==:${order.pickupCode}`,
         order.destinationName,
         `${order.destinationAddress}:==:${order.destinationcode}`
-      ])
+      ]
+    )
       .then((response) => {
-        this.setResponse({ orderId, success: 'Parcel added successfully' });
+        this.setResponse({ orderId, success: 'Parcel added successfully', response });
         this.setStatus(201);
         client.end();
+        res.json(this.response()).status(this.status());
       })
       .catch((error) => {
         this.setResponse(error.message);
         this.setStatus(417);
         client.end();
+        res.json(this.response()).status(this.status());
       });
+    return true;
   }
 
   /**

@@ -18,6 +18,11 @@ defaultRouters.use(cookieParser());
 
 defaultRouters.use(bodyParser.urlencoded({ extended: false }));
 
+defaultRouters.use((req, res, next) => {
+  console.log (`requested url: '${req.url}'`);
+  next();
+});
+
 defaultRouters.get('/', AuthTokenController.checkToken, (req, res) => {
   res.send('<h1> Welcome to SendIT Official Documentation, website');
 });
@@ -93,8 +98,9 @@ defaultRouters.get('/parcels/:parcelId', AuthTokenController.adminToken, (req, r
  * @access :GET /api/v1/parcels
  */
 defaultRouters.get('/parcels', AuthTokenController.adminToken, (req, res) => {
-  ParcelOrderController.getOrders();
+  ParcelOrderController.getOrders(res);
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+  res.end();
 });
 
 /**
@@ -105,8 +111,7 @@ defaultRouters.post('/parcels', AuthTokenController.checkToken, (req, res) => {
   ParcelOrderController.createOrders({
     data: req.body,
     userId: AuthTokenController.decodeToken(req.cookies['x-token']).userId
-  });
-  res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
+  }, res);
 });
 
 /**
@@ -120,7 +125,6 @@ defaultRouters.put('/parcels/:parcelId/cancel', AuthTokenController.checkToken, 
   });
   res.json(ParcelOrderController.response()).status(ParcelOrderController.status());
 });
-
 
 /**
  * API: Change the location of a specific parcel delivery order
