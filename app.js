@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import bodyParser from 'body-parser';
 import { Client } from 'pg';
 
@@ -7,7 +8,7 @@ import errorRouter from './server/routes/errorRoute';
 import DatabaseManager from './server/db_manager/DatabaseManager';
 
 const app = express();
-
+app.use(express.static(path.resolve(__dirname, 'UI')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
@@ -16,8 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Please use the proper API version to access the page' });
-  res.status(401);
+  res.sendFile(`${__dirname}/ui/index.html`);
 });
 
 app.use('/api/v1/', bodyParser.urlencoded({ extended: false }), defaultRouter);
