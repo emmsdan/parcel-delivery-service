@@ -6,8 +6,9 @@ import { Client } from 'pg';
 import { inArray, generateID, isEmpty } from '../helpers/helper';
 import ResponseController from './ResponseController';
 import DatabaseManager from '../db_manager/DatabaseManager';
-import NotificationController from './NotificationController';
-import AuthTokenController from './AuthTokenController'
+// import NotificationController from './NotificationController';
+import AuthTokenController from './AuthTokenController';
+
 const validateRegister = Symbol('validateRegister');
 const validateLogin = Symbol('validateLogin');
 /**
@@ -50,19 +51,19 @@ class UserController extends ResponseController {
   /**
    *
    * @param {object} user
+   * @param {object} res
    * @returns {boolean}
    */
-  loginUser(user) {
+  loginUser(user, res) {
     if (isEmpty(user)) {
       this.setResponse('You need to supply necessary Credentials');
       this.setStatus(200);
-      return false;
+      return this.endResponse({ end: () => {} }, res);
     }
 
     if (!this[validateLogin](user)) {
-      return false;
+      return this.endResponse({ end: () => {} }, res);
     }
-
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
     client.query('SELECT * FROM USERS WHERE email=$1 LIMIT 1', [user.email])
@@ -71,45 +72,42 @@ class UserController extends ResponseController {
           if (user.pass === response.rows[0].password) {
             this.setResponse({ success: 'Login successful' });
             this.setStatus(200);
-            this.setheader(AuthTokenController.generateToken({
+            res.cookie('x-token', AuthTokenController.generateToken({
               userId: response.rows[0].userid,
               mail: response.rows[0].email,
               role: response.rows[0].isadmin
             }));
-            client.end();
-            return true;
+            return this.endResponse(client, res);
           }
           this.setResponse('Password is not valid');
           this.setStatus(403);
-          client.end();
-          return true;
+          return this.endResponse(client, res);
         }
         this.setResponse('Email Does not Exist In Our Database');
         this.setStatus(403);
-        client.end();
-        return true;
+        return this.endResponse(client, res);
       })
       .catch((error) => {
         this.setResponse(error.detail);
         this.setStatus(403);
-        client.end();
-        return true;
+        return this.endResponse(client, res);
       });
   }
 
   /**
    *  Create Users Account
    * @param {object} user
+   * @param {object} res
    * @returns {object}
    */
-  registerUser(user) {
+  registerUser(user, res) {
     if (isEmpty(user)) {
       this.setResponse('You need to supply necessary Credentials');
       this.setStatus(200);
-      return false;
+      return this.endResponse({ end: () => {} }, res);
     }
     if (!this[validateRegister](user)) {
-      return false;
+      return this.endResponse({ end: () => {} }, res);
     }
     const userID = (user.email.split('@')[0] + (generateID(2).toString()));
     const salt = bcrypt.genSaltSync(10);
@@ -126,12 +124,11 @@ class UserController extends ResponseController {
         if (response.rowCount > 0) {
           this.setResponse({ success: 'Account created Successfully', userID });
           this.setStatus(201);
-          this.setheader(AuthTokenController.generateToken({
+          res.cookie('x-token', AuthTokenController.generateToken({
             userId: userID,
             mail: user.email,
             role: user.userType
           }));
-          client.end();
           /*
           NotificationController.setNotification(`Hi, ${user.name} \r\n
            Welcome to SendIt. We are Glad to have you here.`, {
@@ -140,19 +137,19 @@ class UserController extends ResponseController {
             to: user.email
           });
           */
-        } else {
-          this.setResponse('could not create an account, server error');
-          this.setStatus(304);
-          client.end();
+
+          return this.endResponse(client, res);
         }
-        return true;
+        this.setResponse('could not create an account, server error');
+        this.setStatus(304);
+        return this.endResponse(client, res);
       })
       .catch((error) => {
-        if (error.detail.endsWith('already exists.')) {
+        if (error.detail !== undefined || error.detail.includes('already exists.')) {
           this.setResponse(`${error.constraint.split('_')[1]} ${(error.detail.split('=')[1])}`);
           this.setStatus(412);
+          return this.endResponse(client, res);
         }
-        client.end();
       });
     return true;
   }

@@ -10,6 +10,10 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  console.log(`requested url: '${req.url}'`);
+  next();
+});
 
 app.get('/', (req, res) => {
   res.json({ message: 'Please use the proper API version to access the page' });
@@ -27,7 +31,6 @@ app.use('*', errorRouter);
  */
 const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
-
   const client = new Client(DatabaseManager.dbConnectString());
   client.connect();
   client.query(`CREATE TABLE  IF NOT EXISTS users (
@@ -60,12 +63,10 @@ const server = app.listen(port, () => {
     destName VARCHAR,
     destAddress TEXT
   )`)
-    .then((response) => {
-      console.log('Table Created/Exist');
+    .then(() => {
       client.end();
     })
-    .catch((error) => {
-      console.log(`Error Message: ${error}`);
+    .catch(() => {
       client.end();
     });
   console.log(`App server is listening on port ${port}!`);

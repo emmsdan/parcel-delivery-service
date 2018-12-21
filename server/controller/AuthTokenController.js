@@ -32,11 +32,16 @@ class AuthTokenController {
    * @returns {string}
    */
   static checkToken(req, res, next) {
-    if (req.cookies['x-token'] === undefined && req.url.search('auth') < 1) {
-      res.json({ error: 'Unauthoerized', status: 401 }).status(401);
-      return;
+    res.setHeader('API-Author', 'Emmanuel Daniel');
+    res.setHeader('App-Client', 'Andela Bootcamp Cycle 38');
+    const token = AuthTokenController.decodeToken(req.cookies['x-token']);
+    if (!token || (token.role === 'user' && token.userId !== req.params.userId) || (req.cookies['x-token'] === undefined && req.url.search('auth/') < 1)) {
+      res.json({ error: 'Unauthorized', status: 401 }).status(401);
+      res.end();
+    } else {
+      next();
     }
-    next();
+    return false;
   }
 
   /**
@@ -44,16 +49,17 @@ class AuthTokenController {
    * @param {string} req
    * @param {string} res
    * @param {string} next
-   * @returns {string}
    */
   static adminToken(req, res, next) {
-    AuthTokenController.checkToken(req, res, next);
+    res.setHeader('API-Author', 'Emmanuel Daniel');
+    res.setHeader('App-Client', 'Andela Bootcamp Cycle 38');
     const token = AuthTokenController.decodeToken(req.cookies['x-token']);
-    if (token.role === 'user' || token.userId === undefined) {
-      res.json({ error: 'Unauthoerized', status: 401 }).status(401);
-      return;
+    if (token.userId === undefined || token.role.includes('user')) {
+      res.json({ error: 'Unauthorized', status: 401, youAre: token.role }).status(401);
+      res.end();
+    } else {
+      next();
     }
-    next();
   }
 }
 export default AuthTokenController;

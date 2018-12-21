@@ -72,6 +72,11 @@ class ResponseController {
   status() {
     return this[statusCode];
   }
+
+  endResponse(client, res) {
+    client.end();
+    res.json(this.response()).status(this.status());
+  }
 }
 
 export default ResponseController;
