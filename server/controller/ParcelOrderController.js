@@ -43,10 +43,30 @@ class ParcelOrderController extends ResponseController {
         client.end();
       })
       .catch((error) => {
-        this.setResponse('server error');
+        this.setResponse(error.message);
         this.setStatus(204);
         client.end();
       });
+  }
+
+  /**
+   *
+   * @param {string} id
+   * @param {any} log :optioal
+   * @returns {boolean};
+   */
+  validateID(id, log = null) {
+    if (id === undefined && log !== null) {
+      this.setResponse('Please Login to continue');
+      this.setStatus(423);
+      return false;
+    }
+    if (!validator.isAlphanumeric(id) || id === undefined) {
+      this.setResponse('Invalid ID specified');
+      this.setStatus(400);
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -55,12 +75,7 @@ class ParcelOrderController extends ResponseController {
    * @returns {array}
    */
   getSpecificOrder(id) {
-    if (!validator.isAlpha(id)) {
-      this.setResponse('Invalid parcel ID specified');
-      this.setStatus(400);
-      return false;
-    }
-
+    if (!this.validateID(id)) return false;
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
     client.query('SELECT * FROM PARCEL WHERE orderid=$1', [id])
@@ -75,7 +90,7 @@ class ParcelOrderController extends ResponseController {
         client.end();
       })
       .catch((error) => {
-        this.setResponse('server error');
+        this.setResponse(error.message);
         this.setStatus(204);
         client.end();
       });
@@ -87,11 +102,7 @@ class ParcelOrderController extends ResponseController {
    * @returns {array/object}
    */
   getUsersOrder(userid) {
-    if (!validator.isAlphanumeric(userid)) {
-      this.setResponse('Invalid userId specified');
-      this.setStatus(400);
-      return false;
-    }
+    if (!this.validateID(userid)) return false;
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
     client.query('SELECT * FROM PARCEL WHERE userid=$1', [userid])
@@ -106,7 +117,7 @@ class ParcelOrderController extends ResponseController {
         client.end();
       })
       .catch((error) => {
-        this.setResponse('server error');
+        this.setResponse(error.message);
         this.setStatus(204);
         client.end();
       });
@@ -120,11 +131,9 @@ class ParcelOrderController extends ResponseController {
    */
   createOrders(data) {
     const order = data.data;
-    if (data.userId === undefined) {
-      this.setResponse('Please Login to continue');
-      this.setStatus(423);
-      return false;
-    }
+
+    if (!this.validateID(data.userId)) return false;
+
     if (isEmpty(order)) {
       this.setResponse('You need to supply necessary Credentials');
       this.setStatus(417);
@@ -185,36 +194,45 @@ class ParcelOrderController extends ResponseController {
       this.setStatus(200);
       return false;
     }
-    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
       .then((response) => {
         if (response.rowCount > 0) {
           if (response.rows[0].status !== 'delivered') {
-            return DatabaseManager.query('UPDATE PARCEL SET cLocation=$1 WHERE orderid=$2', [
+            const client = new Client(DatabaseManager.dbConnectString());
+            client.connect();
+            client.query('UPDATE PARCEL SET cLocation=$1 WHERE orderid=$2', [
               ids.data,
               ids.parcelId
             ])
-              .then(() => {
+              .then((resp) => {
                 this.setResponse({ success: 'Parcel Current Location Updated' });
                 this.setStatus(200);
+                client.end();
                 return true;
               })
               .catch((error) => {
                 this.setResponse(error.message);
                 this.setStatus(200);
+                client.end();
                 return true;
               });
           }
           this.setResponse('This Parcel can\'t be updated');
           this.setStatus(200);
+          client.end();
           return true;
         }
         this.setResponse('Parcel is not available');
         this.setStatus(200);
+        client.end();
         return true;
       })
       .catch((error) => {
         this.setResponse(`server error: ${error.message}`);
         this.setStatus(200);
+        client.end();
         return false;
       });
   }
@@ -226,32 +244,8 @@ class ParcelOrderController extends ResponseController {
    * @returns {object}
    */
   changeDestination(data) {
-    if (!validator.isAlphanumeric(data.userId)) {
-      this.setResponse('Invalid userId specified');
-      this.setStatus(400);
-      return false;
-    }
-    if (!validator.isNumeric(data.parcelId)) {
-      this.setResponse('Invalid parcelId specified');
-      this.setStatus(400);
-      return false;
-    }
-
-    if (data.data.destinationName === undefined) {
-      this.setResponse('Please Enter the Name of personel to deliver to');
-      this.setStatus(417);
-      return false;
-    }
-    if (data.data.destinationAddress === undefined) {
-      this.setResponse('Please Enter the Delivery Address');
-      this.setStatus(417);
-      return false;
-    }
-    if (data.data.destinationCode === undefined) {
-      this.setResponse('Please Enter the Delivery Area Post Code');
-      this.setStatus(417);
-      return false;
-    }
+    if (!this.validateID(data.userId) || !this.validateID(data.parcelId)) return false;
+    if (!this.validateDest(data)) return false;
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
     client.query('SELECT * FROM PARCEL WHERE orderid=$1', [data.parcelId])
@@ -262,6 +256,7 @@ class ParcelOrderController extends ResponseController {
               this.setResponse('Sorry, this Order has already been delivered. Can\'t Change status.');
               this.setStatus(412);
               client.end();
+              return true;
             }
             const client = new Client(DatabaseManager.dbConnectString());
             client.connect();
@@ -298,26 +293,35 @@ class ParcelOrderController extends ResponseController {
   }
 
   /**
+   * @param {object} order
+   * @returns {boolean}
+   */
+  validateDest(order) {
+    if (order.destinationName === undefined) {
+      this.setResponse('Please Enter the Name of personel to deliver to');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.destinationAddress === undefined) {
+      this.setResponse('Please Enter the Delivery Address');
+      this.setStatus(200);
+      return false;
+    }
+    if (order.destinationCode === undefined) {
+      this.setResponse('Please Enter the Delivery Area Post Code');
+      this.setStatus(200);
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * cancel parcel order from being delivered
    * @param {object} ids : {parcelId, userId}
    * @returns {object}
    */
   cancelOrders(ids) {
-    if (ids.userId === undefined) {
-      this.setResponse('Please Login to continue');
-      this.setStatus(423);
-      return false;
-    }
-    if (!validator.isAlphanumeric(ids.userId)) {
-      this.setResponse('Invalid userId specified');
-      this.setStatus(400);
-      return false;
-    }
-    if (!validator.isNumeric(ids.parcelId)) {
-      this.setResponse('Invalid parcelId specified');
-      this.setStatus(400);
-      return false;
-    }
+    if (!this.validateID(ids.userId) || !this.validateID(ids.userId, 'userid') || !this.validateID(ids.parcelId)) return false;
 
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
@@ -325,11 +329,9 @@ class ParcelOrderController extends ResponseController {
       .then((response) => {
         if (response.rowCount > 0) {
           if (response.rows[0].userid === ids.userId) {
-            return DatabaseManager.query('UPDATE PARCEL SET status=$1 WHERE userid=$2 AND orderid=$3', [
-              'canceled',
-              ids.userId,
-              ids.parcelId
-            ])
+            const client = new Client(DatabaseManager.dbConnectString());
+            client.connect();
+            client.query('UPDATE PARCEL SET status=$1 WHERE userid=$2 AND orderid=$3', ['canceled', ids.userId, ids.parcelId])
               .then(() => {
                 this.setResponse('Parcel canceled');
                 this.setStatus(304);
@@ -373,61 +375,43 @@ class ParcelOrderController extends ResponseController {
       this.setStatus(200);
       return false;
     }
-    if (!validator.isNumeric(ids.parcelId)) {
-      this.setResponse('Invalid parcel Id specified');
-      this.setStatus(200);
-      return false;
-    }
-    return DatabaseManager.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
+    if (!this.validateID(ids.userId)) return false;
+    const client = new Client(DatabaseManager.dbConnectString());
+    client.connect();
+    client.query('SELECT * FROM PARCEL WHERE orderid=$1', [ids.parcelId])
       .then((response) => {
         if (response.rowCount > 0) {
           if (response.rows[0].status !== 'delivered') {
-            return DatabaseManager.query('UPDATE PARCEL SET status=$1 WHERE orderid=$2', [
-              ids.data,
-              ids.parcelId
-            ])
+            const client = new Client(DatabaseManager.dbConnectString());
+            client.connect();
+            client.query('UPDATE PARCEL SET status=$1 WHERE orderid=$2', [ids.data, ids.parcelId])
               .then(() => {
                 this.setResponse({ success: 'Parcel Status Updated' });
                 this.setStatus(200);
+                client.end();
                 return true;
               })
               .catch((error) => {
                 this.setResponse(error);
                 this.setStatus(200);
+                client.end();
                 return true;
               });
           }
           this.setResponse('This Parcel can\'t be updated');
           this.setStatus(200);
+          client.end();
           return true;
         }
         this.setResponse('Parcel is not available');
         this.setStatus(200);
+        client.end();
         return true;
       })
       .catch((error) => {
         this.setResponse(`server error: ${error.message}`);
         this.setStatus(200);
-        return false;
-      });
-  }
-
-  /**
-   * reset database
-   * @returns {null}
-   */
-  resetDB() {
-    return DatabaseManager.query(`DROP TABLE IF EXISTS users, parcel; CREATE TABLE  IF NOT EXISTS users (id SERIAL PRIMARY KEY, userId VARCHAR, username VARCHAR, fullname VARCHAR, phone Numeric, email VARCHAR  (60) UNIQUE, sex VARCHAR, password VARCHAR,registered TIMESTAMP, isAdmin Varchar );
-    CREATE TABLE  IF NOT EXISTS parcel (id SERIAL PRIMARY KEY,orderId VARCHAR, userId VARCHAR, pName VARCHAR, pDesc VARCHAR, pPix Varchar, weight Numeric, weightmetric VARCHAR, status VARCHAR, cLocation VARCHAR, sentOn timestamp, deliveredOn timestamp, pickUpName VARCHAR, pickUpAddress TEXT, destName VARCHAR, destAddress TEXT);
-    INSERT INTO USERS (userid, username, fullname, email, sex, password, isadmin) VALUES ('eadmin123', 'emmsdan', 'emmanuel daniel', 'ecomje@gmal.com', 'male', '$2b$10$4qzMEL9oUbH54dRsuMYNs.S9c9Lsd1KctV0/0M2Cm00MPcfGhi10u', 'admin')`)
-      .then((resp) => {
-        this.setResponse(resp);
-        this.setStatus(200);
-        return false;
-      })
-      .catch((error) => {
-        this.setResponse(`server error: ${error.message}`);
-        this.setStatus(200);
+        client.end();
         return false;
       });
   }

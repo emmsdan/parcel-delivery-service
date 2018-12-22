@@ -121,15 +121,7 @@ class UserController extends ResponseController {
 
     const client = new Client(DatabaseManager.dbConnectString());
     client.connect();
-    client.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [
-      userID,
-      user.name,
-      user.email,
-      'unspecified',
-      password,
-      moment(),
-      user.userType
-    ])
+    client.query('INSERT INTO USERS (userid, fullname, email, sex, password, registered, isadmin) VALUES ($1, $2, $3, $4, $5, $6, $7)', [userID, user.name, user.email, 'unspecified', password, moment(), user.userType])
       .then((response) => {
         if (response.rowCount > 0) {
           this.setResponse({ success: 'Account created Successfully', userID });
@@ -163,22 +155,6 @@ class UserController extends ResponseController {
         client.end();
       });
     return true;
-  }
-
-  /**
-   *  Checks if Specific user exist
-   * @param {number} id : parcel id
-   * @returns {boolean}
-   */
-  userExist(id) {
-    try {
-      if (this.usersDatabase.find(users => users.userid === id).length > 0) {
-        return true;
-      }
-      return false;
-    } catch (err) {
-      return false;
-    }
   }
 
   /**
