@@ -49,7 +49,12 @@ These instructions will get you a copy of the project up and running on your loc
 * **Emmanuel Daniel** - *Git Page* - [emmsdan](https://github.com/emmsdan)
 
 ## Dependencies
+### Server
 
-  ```
-  No Dependecy for the UI
-  ```
+  - Babel
+  - PostgreSQL
+  - JsonWebToken (JWT)
+  - ExpressJs
+
+### Front End
+  - No dependency. Codes written in vanilla Javascript (ES6+);
