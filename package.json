@@ -35,7 +35,7 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.22.2",
     "nodemailer": "^4.7.0",
