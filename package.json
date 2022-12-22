@@ -36,7 +36,7 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.4",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.22.2",
     "nodemailer": "^4.7.0",
     "pg": "^7.6.1",
